@@ -1,0 +1,25 @@
+{
+  "version": "0.1.0",
+  "name": "@joelmanasdbarrio/vista-api",
+  "author": {
+    "name": "Joel Mañas del Barrio",
+    "email": "joelmanasdbarrio@gmail.com",
+    "url": "https://www.linkedin.com/in/joel-ma%C3%B1as-del-barrio/"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "hono": "^4.7.10"
+  },
+  "devDependencies": {
+    "wrangler": "^4.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joelmanasdbarrio/vista-api.git"
+  }
+}
