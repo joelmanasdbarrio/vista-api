@@ -31,3 +31,7 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+.$vista.drawio.bkp
+/prisma/db
+
+/src/generated/prisma
