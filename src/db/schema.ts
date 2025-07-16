@@ -4,7 +4,7 @@ import { pgTable, pgEnum, uuid, text, boolean, timestamp, integer, doublePrecisi
 // --- ENUMS ---
 
 export const genderEnum = pgEnum('gender', ['male', 'female', 'other']);
-export const accountTypeEnum = pgEnum('account_type', ['personal_account', 'enterprise_account']);
+export const accountTypeEnum = pgEnum('account_type', ['personal', 'enterprise']);
 export const followRequestStatusEnum = pgEnum('follow_request_status_enum', ['pending', 'approved', 'rejected']);
 export const establishmentRequestStatusEnum = pgEnum('establishment_request_status', ['pending', 'approved', 'rejected']);
 export const notificationTypeEnum = pgEnum('notification_type', ['follow', 'follow_request', 'establishment_request', 'entry', 'activity', 'system']);
@@ -24,7 +24,7 @@ export const account = pgTable('account', {
   website: text('website'),
   is_private: boolean('is_private').notNull().default(false),
   is_verified: boolean('is_verified').notNull().default(false),
-  type: accountTypeEnum('type').notNull().default('personal_account'),
+  type: accountTypeEnum('type').notNull().default('personal'),
   created_at: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updated_at: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 },

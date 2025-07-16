@@ -2,43 +2,37 @@ import logger from '../../logger.js'
 import AppError from '../AppError.js'
 import { Context } from 'hono'
 
-const labels = { resource: 'Error', layer: 'Middleware', method: 'globalErrorHandler' }
 
 /**
  * Logs and returns the complete error message in development mode for debugging
  */
-const devError = (err: any, c: Context) => {
-  logger.error(c, err, labels)
+const devError = (err: AppError, c: Context) => {
+  const labels = { resource: 'Error', layer: 'Middleware', method: 'devError' }
 
-  const error = {
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack
-  }
-  logger.debug(c, error)
-
-  return c.json(error, err.status)
+  logger.info('Development error', labels)
+  logger.error(err, labels)
+  return c.json(err, err.statusCode)
 }
 
 /**
  * Logs and returns a generic error message in production mode
  */
-const prodError = (err: any, c: Context) => {
-  logger.error(c, err, labels)
+const prodError = (err: AppError, c: Context) => {
+  const labels = { resource: 'Error', layer: 'Middleware', method: 'prodError' }
+  logger.info('Production error', labels)
+  logger.error(err, labels)
 
-  logger.debug(c, { err })
-
-  if (err.isOperational) {
-    return c.json({
-      status: err.status,
-      message: err.message,
-      error: { code: err.code }
-    }, err.statusCode)
+  if (err.statusCode < 500) {
+    return c.json(err)
   } else {
     return c.json({
-      message: 'Something wrong happened',
-      error: { code: err.code }
+      status: 'error',
+      statusCode: 500,
+      error: {
+        code: err.errors ? err.errors[0].code : err.error?.code,
+        message: 'An unexpected error occurred',
+        details: 'Please try again later or contact support'
+      }
     }, 500)
   }
 }
@@ -46,9 +40,9 @@ const prodError = (err: any, c: Context) => {
 export default function globalErrorHandler(err: any, c: Context) {
   // Ensure the error is always an AppError
   if (!(err instanceof AppError)) {
-    err = new AppError(err.message || 'Internal Server Error', 500, 'INTERNAL_SERVER_ERROR', undefined)
+    err = new AppError(500, err.message || 'Internal Server Error', { code: err.code || 'INTERNAL_SERVER_ERROR', message: err.message })
   }
-  if (process.env.NODE_ENV === 'development') {
+  if (c.env.NODE_ENV === 'development') {
     return devError(err, c)
   } else {
     return prodError(err, c)

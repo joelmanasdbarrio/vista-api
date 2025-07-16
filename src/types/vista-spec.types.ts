@@ -28,11 +28,9 @@ export type EstablishmentRequestDTO = components['schemas']['EstablishmentReques
 export type PaginatedDTO = components['schemas']['PaginatedDTO'];
 export type AccountsPaginatedDTO = components['schemas']['AccountsPaginatedDTO'];
 export type AccountsPersonalPaginatedDTO = components['schemas']['AccountsPersonalPaginatedDTO'];
-export type AccountsEnterprisePaginatedDTO = components['schemas']['AccountsEnterprisePaginatedDTO'];
 export type FollowRequestsPaginatedDTO = components['schemas']['FollowRequestsPaginatedDTO'];
 export type NotificationsPaginatedDTO = components['schemas']['NotificationsPaginatedDTO'];
 export type ActivitiesPaginatedDTO = components['schemas']['ActivitiesPaginatedDTO'];
-export type ActivityCategoriesPaginatedDTO = components['schemas']['ActivityCategoriesPaginatedDTO'];
 export type EstablishmentsPaginatedDTO = components['schemas']['EstablishmentsPaginatedDTO'];
 export type EstablishmentRequestsPaginatedDTO = components['schemas']['EstablishmentRequestsPaginatedDTO'];
 
@@ -62,6 +60,49 @@ export type ForbiddenError = components['responses']['ForbiddenError'];
 export type NotFoundError = components['responses']['NotFoundError'];
 export type InternalServerError = components['responses']['InternalServerError'];
 
+// Enums
+export enum AccountTypeEnum {
+  PERSONAL = 'personal',
+  ENTERPRISE = 'enterprise'
+}
+
+export enum GenderEnum {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other'
+}
+
+export enum ActivityTypeEnum {
+  ONSITE = 'onsite',
+  ONLINE = 'online'
+}
+
+export enum ActivityLanguageEnum {
+  ENGLISH = 'en',
+  SPANISH = 'es',
+}
+
+export enum FollowRequestStatusEnum {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+}
+
+export enum EstablishmentRequestStatusEnum {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+}
+
+export enum NotificationTypeEnum {
+  FOLLOW = 'follow',
+  FOLLOW_REQUEST = 'follow_request',
+  ESTABLISHMENT_REQUEST = 'establishment_request',
+  ENTRY = 'entry',
+  ACTIVITY = 'activity',
+  SYSTEM = 'system'
+}
+
 // Query parameters types
 
 /**
@@ -69,7 +110,9 @@ export type InternalServerError = components['responses']['InternalServerError']
  * Matches OpenAPI: accountTypeParam, accountNameParam, accountUsernameParam
  */
 export interface GetAccountsQuery {
-  type?: 'personal' | 'enterprise';
+  page?: number;
+  limit?: number;
+  type?: AccountTypeEnum;
   name?: string;
   username?: string;
 }
@@ -79,6 +122,8 @@ export interface GetAccountsQuery {
  * Matches OpenAPI: establishmentNameParam, establishmentAddressParam
  */
 export interface GetAccountEstablishmentsQuery {
+  page?: number;
+  limit?: number;
   name?: string;
   address?: string;
 }
@@ -88,6 +133,8 @@ export interface GetAccountEstablishmentsQuery {
  * Matches OpenAPI: accountNameParam, accountUsernameParam
  */
 export interface GetAccountFollowersQuery {
+  page?: number;
+  limit?: number;
   name?: string;
   username?: string;
 }
@@ -97,7 +144,9 @@ export interface GetAccountFollowersQuery {
  * Matches OpenAPI: activityTypeParam, activityTitleParam, activityDescriptionParam, activityCategoryIdParam, activityMinPriceParam, activityMaxPriceParam, activityTimeStartParam, activityTimeEndParam, activityMinParcipantsParam, activityMaxParcipantsParam, activityMinEntriesParam, activityMaxEntriesParam, activityLanguageParam
  */
 export interface GetActivitiesQuery {
-  type?: 'onsite' | 'online';
+  page?: number;
+  limit?: number;
+  type?: ActivityTypeEnum;
   title?: string;
   description?: string;
   categoryId?: string;
@@ -117,6 +166,8 @@ export interface GetActivitiesQuery {
  * Matches OpenAPI: accountNameParam, accountUsernameParam
  */
 export interface GetActivityParticipantsQuery {
+  page?: number;
+  limit?: number;
   name?: string;
   username?: string;
 }
@@ -126,6 +177,8 @@ export interface GetActivityParticipantsQuery {
  * Matches OpenAPI: establishmentNameParam, establishmentAddressParam
  */
 export interface GetEstablishmentsQuery {
+  page?: number;
+  limit?: number;
   name?: string;
   address?: string;
 }

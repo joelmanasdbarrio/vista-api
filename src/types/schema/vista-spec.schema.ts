@@ -21,7 +21,11 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    patch?: never;
+    /**
+     * Update account
+     * @description Update one account
+     */
+    patch: operations["updateAccount"];
     trace?: never;
   };
   [path: `/accounts/${string}`]: {
@@ -45,11 +49,7 @@ export interface paths {
     delete: operations["deleteAccount"];
     options?: never;
     head?: never;
-    /**
-     * Update account
-     * @description Update one account
-     */
-    patch: operations["updateAccount"];
+    patch?: never;
     trace?: never;
   };
   [path: `/accounts/${string}/establishments`]: {
@@ -380,7 +380,7 @@ export interface paths {
     patch: operations["updateEstablishment"];
     trace?: never;
   };
-  "/establishments/requests": {
+  [path: `/establishments/${string}/requests`]: {
     parameters: {
       query?: never;
       header?: never;
@@ -404,7 +404,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  [path: `/establishments/requests/${string}`]: {
+  [path: `/establishments/${string}/requests/${string}`]: {
     parameters: {
       query?: never;
       header?: never;
@@ -445,13 +445,13 @@ export interface components {
        * @default personal
        * @enum {string}
        */
-      accountType: "personal";
+      type: "personal";
     } & (components["schemas"]["AccountBase"] & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      type: "AccountPersonalDTO";
+      accountType: "AccountPersonalDTO";
     });
     AccountEnterpriseDTO: {
       /** @default false */
@@ -460,13 +460,13 @@ export interface components {
        * @default enterprise
        * @enum {string}
        */
-      accountType: "enterprise";
+      type: "enterprise";
     } & (components["schemas"]["AccountBase"] & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      type: "AccountEnterpriseDTO";
+      accountType: "AccountEnterpriseDTO";
     });
     AccountBase: {
       /** Format: uuid */
@@ -555,13 +555,13 @@ export interface components {
        * @default onsite
        * @enum {string}
        */
-      activityType: "onsite";
+      type: "onsite";
     } & (components["schemas"]["ActivityBase"] & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      type: "ActivityOnsiteDTO";
+      activityType: "ActivityOnsiteDTO";
     });
     ActivityOnlineDTO: {
       location: {
@@ -571,13 +571,13 @@ export interface components {
        * @default online
        * @enum {string}
        */
-      activityType: "online";
+      type: "online";
     } & (components["schemas"]["ActivityBase"] & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      type: "ActivityOnlineDTO";
+      activityType: "ActivityOnlineDTO";
     });
     ActivityBase: {
       /** Format: uuid */
@@ -688,9 +688,6 @@ export interface components {
     AccountsPersonalPaginatedDTO: {
       data: components["schemas"]["AccountPersonalDTO"][];
     } & components["schemas"]["PaginatedDTO"];
-    AccountsEnterprisePaginatedDTO: {
-      data: components["schemas"]["AccountEnterpriseDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
     FollowRequestsPaginatedDTO: {
       data: components["schemas"]["FollowRequestDTO"][];
     } & components["schemas"]["PaginatedDTO"];
@@ -699,9 +696,6 @@ export interface components {
     } & components["schemas"]["PaginatedDTO"];
     ActivitiesPaginatedDTO: {
       data: components["schemas"]["ActivityDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
-    ActivityCategoriesPaginatedDTO: {
-      data: components["schemas"]["ActivityCategoryDTO"][];
     } & components["schemas"]["PaginatedDTO"];
     EstablishmentsPaginatedDTO: {
       data: components["schemas"]["EstablishmentDTO"][];
@@ -805,7 +799,8 @@ export interface components {
        * @enum {string}
        */
       status: "success";
-    } & components["schemas"]["ActivityCategoriesPaginatedDTO"];
+      data: components["schemas"]["ActivityCategoryDTO"][];
+    };
     EstablishmentsResponse: {
       /**
        * @default success
@@ -980,6 +975,10 @@ export interface components {
     };
   };
   parameters: {
+    /** @description Page number for pagination */
+    pageParam: number;
+    /** @description Number of items per page for pagination */
+    limitParam: number;
     /** @description Account ID */
     accountIdParam: string;
     /** @description Account type */
@@ -1038,6 +1037,10 @@ export interface operations {
   getAccounts: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Account type */
         type?: components["parameters"]["accountTypeParam"];
         /** @description Account name */
@@ -1060,8 +1063,38 @@ export interface operations {
           "application/json": components["schemas"]["AccountsResponse"];
         };
       };
+      400: components["responses"]["BadRequestError"];
       401: components["responses"]["UnauthorizedError"];
       403: components["responses"]["ForbiddenError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  updateAccount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AccountDTO"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AccountResponse"];
+        };
+      };
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
       500: components["responses"]["InternalServerError"];
     };
   };
@@ -1117,41 +1150,13 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
-  updateAccount: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AccountDTO"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AccountResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
   getAccountEstablishments: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Establishment name */
         name?: components["parameters"]["establishmentNameParam"];
         /** @description Establishment address */
@@ -1184,6 +1189,10 @@ export interface operations {
   getAccountFollowers: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Account name */
         name?: components["parameters"]["accountNameParam"];
         /** @description Account username */
@@ -1216,6 +1225,10 @@ export interface operations {
   getAccountFollowings: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Account name */
         name?: components["parameters"]["accountNameParam"];
         /** @description Account username */
@@ -1331,7 +1344,12 @@ export interface operations {
   };
   getFollowRequests: {
     parameters: {
-      query?: never;
+      query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -1438,7 +1456,12 @@ export interface operations {
   };
   getNotifications: {
     parameters: {
-      query?: never;
+      query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -1493,6 +1516,10 @@ export interface operations {
   getActivities: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Activity type */
         type?: components["parameters"]["activityTypeParam"];
         /** @description Activity title */
@@ -1655,6 +1682,10 @@ export interface operations {
   getActivityParticipants: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Account name */
         name?: components["parameters"]["accountNameParam"];
         /** @description Account username */
@@ -1762,6 +1793,10 @@ export interface operations {
   getEstablishments: {
     parameters: {
       query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
         /** @description Establishment name */
         name?: components["parameters"]["establishmentNameParam"];
         /** @description Establishment address */
@@ -1901,9 +1936,17 @@ export interface operations {
   };
   getEstablishmentRequests: {
     parameters: {
-      query?: never;
+      query?: {
+        /** @description Page number for pagination */
+        page?: components["parameters"]["pageParam"];
+        /** @description Number of items per page for pagination */
+        limit?: components["parameters"]["limitParam"];
+      };
       header?: never;
-      path?: never;
+      path: {
+        /** @description Establishment ID */
+        id: components["parameters"]["establishmentIdParam"];
+      };
       cookie?: never;
     };
     requestBody?: never;
@@ -1926,7 +1969,10 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        /** @description Establishment ID */
+        id: components["parameters"]["establishmentIdParam"];
+      };
       cookie?: never;
     };
     requestBody: {
@@ -1955,8 +2001,10 @@ export interface operations {
       query?: never;
       header?: never;
       path: {
+        /** @description Establishment ID */
+        id: components["parameters"]["establishmentIdParam"];
         /** @description Establishment request ID */
-        id: components["parameters"]["establishmentRequestIdParam"];
+        requestId: components["parameters"]["establishmentRequestIdParam"];
       };
       cookie?: never;
     };
@@ -1980,8 +2028,10 @@ export interface operations {
       query?: never;
       header?: never;
       path: {
+        /** @description Establishment ID */
+        id: components["parameters"]["establishmentIdParam"];
         /** @description Establishment request ID */
-        id: components["parameters"]["establishmentRequestIdParam"];
+        requestId: components["parameters"]["establishmentRequestIdParam"];
       };
       cookie?: never;
     };

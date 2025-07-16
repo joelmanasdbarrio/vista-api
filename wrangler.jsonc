@@ -3,6 +3,9 @@
   "name": "vista-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-05-29",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "vars": {
     "NODE_ENV": "development",
     // -- Grafana

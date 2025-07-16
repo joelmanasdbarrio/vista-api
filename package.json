@@ -8,8 +8,8 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "wrangler:dev": "wrangler dev",
+    "wrangler:deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "wrangler-secret:put": "wrangler secret put",
     "drizzle:generate": "npx drizzle-kit generate",
@@ -17,19 +17,21 @@
     "types:generate": "npx openapi-typescript ./node_modules/@joelmanasdbarrio/vista-spec/openapi/openapi-rest.yaml --output ./src/types/schema/vista-spec.schema.ts --path-params-as-types"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.1",
+    "@supabase/supabase-js": "^2.50.3",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.7.10",
     "postgres": "^3.4.7",
-    "winston-loki": "^6.1.3"
+    "uuid": "^11.1.0",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@joelmanasdbarrio/vista-spec": "1.1.2-dev.86",
+    "@joelmanasdbarrio/vista-spec": "1.1.2",
     "@types/node": "^22.15.29",
-    "@types/winston": "^2.4.4",
     "drizzle-kit": "^0.31.1",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "wrangler": "^4.4.0"
+    "wrangler": "^4.24.3"
   },
   "repository": {
     "type": "git",

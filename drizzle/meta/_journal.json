@@ -8,6 +8,13 @@
       "when": 1751319688872,
       "tag": "0000_fine_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1752078930184,
+      "tag": "0001_sync-auth-users",
+      "breakpoints": true
     }
   ]
 }
