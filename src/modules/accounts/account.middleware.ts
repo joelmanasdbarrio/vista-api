@@ -1,6 +1,6 @@
 import { AccountDTO } from '../../types/vista-spec.types'
 import AppError from '../../utils/error_handling/AppError'
-import { AccountService } from './account.service'
+import AccountService from './account.service'
 import { Context, Next } from 'hono'
 
 export const accountExists = async (c: Context, next: Next) => {

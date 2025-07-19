@@ -1,13 +1,20 @@
+import { Context } from "hono";
 import { activity_category } from "../../../db/schema";
 import { ActivityCategoryDTO } from "../../../types/vista-spec.types";
 import ActivityCategoryService from "./activityCategory.service";
 
 export default class ActivityCategoryMapper {
-  static async toDTO(input: typeof activity_category.$inferSelect): Promise<ActivityCategoryDTO> {
+  protected c: Context
+
+  constructor(c: Context) {
+    this.c = c
+  }
+
+  async toDTO(input: typeof activity_category.$inferSelect): Promise<ActivityCategoryDTO> {
     let parentActivityCategoryDTO: ActivityCategoryDTO | undefined = undefined
     if (input.parent_id) {
       const activityCategoryService = new ActivityCategoryService()
-      parentActivityCategoryDTO = await activityCategoryService.getOneActivityCategory(input.parent_id)
+      parentActivityCategoryDTO = await activityCategoryService.getOneActivityCategory(this.c, input.parent_id)
     }
 
     return {
@@ -22,7 +29,7 @@ export default class ActivityCategoryMapper {
     }
   }
 
-  static async toDTOs(input: typeof activity_category.$inferSelect[]): Promise<ActivityCategoryDTO[]> {
+  async toDTOs(input: typeof activity_category.$inferSelect[]): Promise<ActivityCategoryDTO[]> {
     return await Promise.all(input.map(this.toDTO))
   }
 }

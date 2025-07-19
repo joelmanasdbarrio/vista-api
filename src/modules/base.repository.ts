@@ -6,8 +6,10 @@ export default abstract class BaseRepository implements Repository {
   protected layer: string = 'Repository'
   protected supabase
   protected drizzle
+  protected c: Context
 
   constructor(c: Context) {
+    this.c = c
     this.supabase = createClient(
       c.env.DATABASE_URL,
       c.env.SUPABASE_API_KEY

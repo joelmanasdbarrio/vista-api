@@ -3,7 +3,9 @@ import { AccountDTO, AccountEnterpriseDTO, AccountPersonalDTO, AccountTypeEnum }
 import AppError from "../../utils/error_handling/AppError";
 
 export default class AccountMapper {
-  static toDTO(input: typeof account.$inferSelect): AccountDTO {
+  constructor() { }
+
+  toDTO(input: typeof account.$inferSelect): AccountDTO {
     if (input.type === AccountTypeEnum.PERSONAL) {
       return {
         id: input.id,
@@ -36,11 +38,11 @@ export default class AccountMapper {
         type: AccountTypeEnum.ENTERPRISE
       } as AccountEnterpriseDTO;
     } else {
-      throw new AppError(`Unknown account type: ${input.type}`, 400, 'Bad Request');
+      throw new AppError(400, `Unknown account type: ${input.type}`, { code: 'UNKNOOWN_ACCOUNT_TYPE', message: `Unknown account type: ${input.type}`, details: `Please, use one of the available account types: ${AccountTypeEnum.PERSONAL}, ${AccountTypeEnum.ENTERPRISE}` });
     }
   }
 
-  static toDTOs(input: typeof account.$inferSelect[]): AccountDTO[] {
+  toDTOs(input: typeof account.$inferSelect[]): AccountDTO[] {
     return input.map(this.toDTO);
   }
 }

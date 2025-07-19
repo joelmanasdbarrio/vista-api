@@ -1,9 +1,8 @@
-import { Hono } from 'hono'
-import z from 'zod'
+import { Context, Hono } from 'hono'
 import AccountController from './account.controller'
 import { protectedRoute } from '../auth/auth.middleware'
-import { AccountTypeEnum, GenderEnum } from '../../types/vista-spec.types'
 import validate from '../../utils/error_handling/middlewares/validator.middleware'
+import { getAccountSchema, GetAccountsInput, getAccountsSchema, PatchAccountInput, patchAccountSchema } from './lib/account.validations'
 
 export default class AccountRouter {
   public router: Hono
@@ -17,14 +16,14 @@ export default class AccountRouter {
       .all('/', protectedRoute)
       .get('/',
         validate('query', getAccountsSchema),
-        async (c) => {
+        async (c: Context<any, any, GetAccountsInput>) => {
           const res = await this.accountController.getAccounts(c)
           return c.json({ ...res }, 200)
         }
       )
       .patch('/',
         validate('json', patchAccountSchema),
-        async (c) => {
+        async (c: Context<any, any, PatchAccountInput>) => {
           const res = await this.accountController.updateAccount(c)
           return c.json({ ...res }, 200)
         }
@@ -50,26 +49,3 @@ export default class AccountRouter {
   }
 }
 
-const getAccountsSchema = z.object({
-  page: z.coerce.number().optional(),
-  limit: z.coerce.number().optional(),
-  type: z.enum(AccountTypeEnum).optional(),
-  name: z.string().optional(),
-  username: z.string().optional()
-})
-
-const getAccountSchema = z.object({
-  id: z.union([z.uuid(), z.string()])
-})
-
-const patchAccountSchema = z.object({
-  id: z.uuid(),
-  name: z.string().optional(),
-  username: z.string().optional(),
-  biography: z.string().optional(),
-  avatar: z.string().optional(),
-  website: z.url().optional(),
-  isPrivate: z.boolean().optional(),
-  gender: z.enum(GenderEnum).optional(),
-  birthdate: z.date().optional(),
-})

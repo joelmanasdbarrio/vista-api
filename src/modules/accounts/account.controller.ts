@@ -1,10 +1,11 @@
 import { Context } from 'hono'
-import { getContext } from 'hono/context-storage'
-import { BaseController } from '../base.controller'
+import BaseController from '../base.controller'
 import Logger, { LogLabels } from '../../utils/logger'
-import { AccountService } from './account.service'
+import AccountService from './account.service'
 import { AccountDTO, AccountResponse, AccountsPaginatedDTO, AccountsResponse } from '../../types/vista-spec.types'
 import AppError from '../../utils/error_handling/AppError'
+import { GetAccountsInput, PatchAccountInput } from './lib/account.validations'
+import '../../types/hono.types'
 
 export default class AccountController extends BaseController {
   protected resource = 'Account'
@@ -15,7 +16,7 @@ export default class AccountController extends BaseController {
     this.accountService = new AccountService()
   }
 
-  async getAccounts(c: Context): Promise<AccountsResponse> {
+  async getAccounts(c: Context<any, any, GetAccountsInput>): Promise<AccountsResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAccounts' }
     Logger.info('Get all Account documents paginated', labels)
 
@@ -55,7 +56,7 @@ export default class AccountController extends BaseController {
     }
   }
 
-  async updateAccount(c: Context): Promise<AccountResponse> {
+  async updateAccount(c: Context<any, any, PatchAccountInput>): Promise<AccountResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateAccount' }
     Logger.info('Update Account document', labels)
 
@@ -83,7 +84,7 @@ export default class AccountController extends BaseController {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteAccount' }
     Logger.info('Delete Account document by ID', labels)
 
-    const user = getContext().var.user as AccountDTO
+    const user = c.get('user') as AccountDTO
     await this.accountService.deleteOneAccount(c)
 
     Logger.info(`Deleted account "${user.name}" (${user.id})`, labels)

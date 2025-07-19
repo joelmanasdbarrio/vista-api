@@ -1,23 +1,23 @@
 import { Context } from "hono"
-import { getContext } from 'hono/context-storage'
-import Logger from "../../utils/logger"
-import { BaseRepository } from "../base.repository"
+import Logger, { LogLabels } from "../../utils/logger"
+import BaseRepository from "../base.repository"
 import { AccountDTO, AccountTypeEnum, GetAccountsQuery } from "../../types/vista-spec.types"
 import { account } from "../../db/schema"
 import AccountMapper from "./account.mapper"
 import { and, count, eq, like, or, sql, SQL } from "drizzle-orm"
-import AppError from "../../utils/error_handling/AppError"
 
-export class AccountRepository extends BaseRepository {
+export default class AccountRepository extends BaseRepository {
   protected resource = 'Account'
+  protected accountMapper: AccountMapper
 
   constructor(c: Context) {
     super(c)
+    this.accountMapper = new AccountMapper()
   }
 
   async getAllPaginated({ page = 1, limit = 10, name = '', username = '', type = AccountTypeEnum.PERSONAL }: GetAccountsQuery): Promise<{ accounts: AccountDTO[], totalAccounts: number }> {
-    const labels = { resource: this.resource, layer: this.layer, method: 'getAllPaginated' }
-    Logger.info('Get all Account documents paginated', labels)
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllPaginated' }
+    Logger.info('Get Account documents paginated', labels)
 
     const queryStr = (name || username)?.trim().toLowerCase()
     const filters: Array<SQL | undefined> = [
@@ -44,30 +44,39 @@ export class AccountRepository extends BaseRepository {
       .where(and(...filters))
       .limit(limit)
       .offset((page - 1) * limit)
-    const accountsDTO = AccountMapper.toDTOs(accountsDB)
+
+    const accountDTOs = this.accountMapper.toDTOs(accountsDB)
 
     return {
-      accounts: accountsDTO,
+      accounts: accountDTOs,
       totalAccounts: totalCount[0].count || 0
     }
   }
 
-  async getOneById(id: string): Promise<AccountDTO | undefined> {
-    const labels = { resource: this.resource, layer: this.layer, method: 'getOneById' }
-    Logger.info('Get one Account document', labels)
+  /**
+   * @deprecated
+   */
+  async getAll(query: any): Promise<any> {
+    throw new Error("Method not implemented.")
+  }
 
-    const accountDB: typeof account.$inferSelect[] = await this.drizzle
+  async getOneById(id: string): Promise<AccountDTO | undefined> {
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneById' }
+    Logger.info('Get Account document', labels)
+
+    const [accountDB]: typeof account.$inferSelect[] = await this.drizzle
       .select()
       .from(account)
       .where(
         eq(account.id, id)
       )
-    if (accountDB.length > 0) return AccountMapper.toDTO(accountDB[0])
+
+    if (accountDB) return this.accountMapper.toDTO(accountDB)
   }
 
   async getOneByUsername(username: string): Promise<AccountDTO | undefined> {
-    const labels = { resource: this.resource, layer: this.layer, method: 'getOneByUsername' }
-    Logger.info('Get one Account document', labels)
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneByUsername' }
+    Logger.info('Get Account document', labels)
 
     const [accountDB]: typeof account.$inferSelect[] = await this.drizzle
       .select()
@@ -76,19 +85,20 @@ export class AccountRepository extends BaseRepository {
         eq(account.username, username)
       )
 
-    if (accountDB) return AccountMapper.toDTO(accountDB)
+    const accountMapper = new AccountMapper()
+    if (accountDB) return accountMapper.toDTO(accountDB)
   }
 
   /**
    * @deprecated
    */
-  createOne(data: any): Promise<any> {
+  async createOne(data: any): Promise<any> {
     throw new Error("Method not implemented.")
   }
 
   async updateOneById(id: string, data: any, obj: any): Promise<AccountDTO | undefined> {
-    const labels = { resource: this.resource, layer: this.layer, method: 'updateOneById' }
-    Logger.info('Update one Account document', labels)
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneById' }
+    Logger.info('Update Account document', labels)
 
     const updates: Record<string, any> = {
       name: data.name !== undefined ? data.name : obj.name,
@@ -127,12 +137,12 @@ export class AccountRepository extends BaseRepository {
     //     .returning()
     // })
 
-    if (accountDB) return AccountMapper.toDTO(accountDB)
+    if (accountDB) return this.accountMapper.toDTO(accountDB)
   }
 
   async deleteOneById(id: string): Promise<void> {
-    const labels = { resource: this.resource, layer: this.layer, method: 'deleteOneById' }
-    Logger.info('Update one Account document', labels)
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteOneById' }
+    Logger.info('Update Account document', labels)
 
     await this.drizzle
       .delete(account)

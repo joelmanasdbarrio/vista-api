@@ -3,6 +3,7 @@ import { verify } from 'hono/jwt'
 import Logger from '../../utils/logger'
 import AppError from '../../utils/error_handling/AppError'
 import AccountService from '../accounts/account.service'
+import '../../types/hono.types'
 
 export const protectedRoute = async (c: Context, next: Next) => {
   Logger.info('Protected route', { resource: 'Auth', layer: 'Middleware', method: 'protectedRoute' })

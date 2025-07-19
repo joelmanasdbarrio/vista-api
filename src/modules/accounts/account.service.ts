@@ -1,13 +1,13 @@
 import { Context } from 'hono'
-import { getContext } from 'hono/context-storage'
 import { validate as uuidValidate } from 'uuid'
-import { BaseService } from '../base.service'
+import BaseService from '../base.service'
 import Logger, { LogLabels } from '../../utils/logger'
 import { AccountDTO, AccountsPaginatedDTO, GetAccountsQuery } from '../../types/vista-spec.types'
-import { AccountRepository } from './account.repository'
+import AccountRepository from './account.repository'
 import AppError from '../../utils/error_handling/AppError'
+import '../../types/hono.types'
 
-export class AccountService extends BaseService {
+export default class AccountService extends BaseService {
   protected resource = 'Account'
 
   constructor() {
@@ -16,7 +16,7 @@ export class AccountService extends BaseService {
 
   async getAllAccountsPaginated(c: Context, query: GetAccountsQuery): Promise<AccountsPaginatedDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllAccountsPaginated' }
-    Logger.info('Get all Account documents paginated', labels)
+    Logger.info('Get Account documents paginated', labels)
 
     const accountRepository = new AccountRepository(c)
     const { accounts, totalAccounts } = await accountRepository.getAllPaginated(query)
@@ -49,7 +49,7 @@ export class AccountService extends BaseService {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneAccount' }
     Logger.info(`Update Account document`, labels)
 
-    const user = getContext().var.user as AccountDTO
+    const user = c.get('user') as AccountDTO
 
     if (JSON.stringify(user.id) !== JSON.stringify(body.id)) throw new AppError(403, 'Forbidden', { code: 'FORBIDDEN', message: 'Forbidden', details: 'You can only update your own account.' })
 
@@ -61,9 +61,9 @@ export class AccountService extends BaseService {
 
   async deleteOneAccount(c: Context): Promise<void> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteOneAccount' }
-    Logger.info(`Update Account document`, labels)
+    Logger.info(`Delete Account document`, labels)
 
-    const user = getContext().var.user as AccountDTO
+    const user = c.get('user') as AccountDTO
 
     const accountRepository = new AccountRepository(c)
     await accountRepository.deleteOneById(user.id)
