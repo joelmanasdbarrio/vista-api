@@ -1,3 +1,3 @@
-export abstract class BaseController {
+export default abstract class BaseController {
   protected layer: string = 'Controller';
 }

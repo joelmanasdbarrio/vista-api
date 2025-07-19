@@ -109,7 +109,7 @@ export const activity_category = pgTable('activity_category', {
   id: uuid('id').primaryKey().defaultRandom(),
   parent_id: uuid('parent_id'),
   name: text('name').unique().notNull(),
-  i18nkey: text('i18nkey').unique().notNull(),
+  i18nKey: text('i18nKey').unique().notNull(),
   icon: text('icon'),
   color: text('color'),
   created_at: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -121,7 +121,7 @@ export const activity_category = pgTable('activity_category', {
       foreignColumns: [table.id],
       name: 'activity_category_parent_id_fkey'
     }),
-    index('activity_category_i18nkey_idx').on(table.i18nkey),
+    index('activity_category_i18nkey_idx').on(table.i18nKey),
     check('activity_category_parent_id_check', sql`(${table.parent_id} IS NULL OR ${table.parent_id} != ${table.id})`),
     check('activity_category_required_check', sql`((${table.parent_id} IS NOT NULL AND ${table.icon} IS NOT NULL) OR (${table.parent_id} IS NULL AND ${table.color} IS NOT NULL))`),
   ]

@@ -2,7 +2,7 @@ import { Context } from "hono"
 import { createClient } from "@supabase/supabase-js"
 import { drizzle } from "drizzle-orm/postgres-js"
 
-export abstract class BaseRepository implements Repository {
+export default abstract class BaseRepository implements Repository {
   protected layer: string = 'Repository'
   protected supabase
   protected drizzle
@@ -17,6 +17,7 @@ export abstract class BaseRepository implements Repository {
   }
 
   abstract getAllPaginated(query: any): Promise<any>
+  abstract getAll(query: any): Promise<any>
   abstract getOneById(id: string): Promise<any>
   abstract createOne(data: any): Promise<any>
   abstract updateOneById(id: string, data: any, obj: any): Promise<any>
@@ -25,6 +26,7 @@ export abstract class BaseRepository implements Repository {
 
 interface Repository {
   getAllPaginated: (query: any) => Promise<any>
+  getAll: (query: any) => Promise<any>
   getOneById: (id: string) => Promise<any>
   createOne: (data: any) => Promise<any>
   updateOneById: (id: string, data: any, obj: any) => Promise<any>

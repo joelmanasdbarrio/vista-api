@@ -280,7 +280,7 @@ export interface paths {
     patch: operations["updateActivity"];
     trace?: never;
   };
-  [path: `/activity/${string}/participants`]: {
+  [path: `/activities/${string}/participants`]: {
     parameters: {
       query?: never;
       header?: never;
@@ -308,7 +308,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/activity/categories": {
+  "/activities/categories": {
     parameters: {
       query?: never;
       header?: never;
@@ -555,7 +555,7 @@ export interface components {
        * @default onsite
        * @enum {string}
        */
-      type: "onsite";
+      activityType: "onsite";
     } & (components["schemas"]["ActivityBase"] & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -571,7 +571,7 @@ export interface components {
        * @default online
        * @enum {string}
        */
-      type: "online";
+      activityType: "online";
     } & (components["schemas"]["ActivityBase"] & {
       /**
        * @description discriminator enum property added by openapi-typescript
