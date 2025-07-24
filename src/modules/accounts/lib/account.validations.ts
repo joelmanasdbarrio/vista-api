@@ -14,7 +14,6 @@ export const getAccountSchema = z.object({
 })
 
 export const patchAccountSchema = z.object({
-  id: z.uuid(),
   name: z.string().optional(),
   username: z.string().optional(),
   biography: z.string().optional(),
@@ -23,9 +22,10 @@ export const patchAccountSchema = z.object({
   isPrivate: z.boolean().optional(),
   gender: z.enum(GenderEnum).optional(),
   birthdate: z.date().optional(),
+  type: z.enum(AccountTypeEnum).optional()
 })
 
-export type GetAccountsInput = {
+export interface GetAccountsInput {
   in: {
     query: z.infer<typeof getAccountsSchema>
   }
@@ -34,7 +34,16 @@ export type GetAccountsInput = {
   }
 }
 
-export type PatchAccountInput = {
+export interface GetAccountInput {
+  in: {
+    param: z.infer<typeof getAccountSchema>
+  }
+  out: {
+    param: z.infer<typeof getAccountSchema>
+  }
+}
+
+export interface PatchAccountInput {
   in: {
     json: z.infer<typeof patchAccountSchema>
   }
@@ -42,3 +51,7 @@ export type PatchAccountInput = {
     json: z.infer<typeof patchAccountSchema>
   }
 }
+
+export type GetAccountsQuery = z.infer<typeof getAccountsSchema>
+export type GetAccountParam = z.infer<typeof getAccountSchema>
+export type PatchAccountBody = z.infer<typeof patchAccountSchema>

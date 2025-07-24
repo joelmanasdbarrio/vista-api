@@ -1,0 +1,1 @@
+ALTER TABLE "account" ALTER COLUMN "birthdate" DROP DEFAULT;

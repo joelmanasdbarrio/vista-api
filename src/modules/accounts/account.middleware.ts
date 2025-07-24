@@ -8,13 +8,15 @@ export const accountExists = async (c: Context, next: Next) => {
 
   const accountService = new AccountService()
 
-  const account = await accountService.getOneAccount(c, id) as AccountDTO | undefined
+  const account = await accountService.getOneAccount(c, id)
 
-  if (!account) throw new AppError(404, `Account with ID "${id}" not found`, {
-    code: 'ACCOUNT_NOT_FOUND',
-    message: `Account with ID "${id}" not found`,
-    details: 'Please, check if the desired ID or Username is correctly typed'
-  })
+  if (account == null) {
+    throw new AppError(404, `Account with ID "${id}" not found`, {
+      code: 'ACCOUNT_NOT_FOUND',
+      message: `Account with ID "${id}" not found`,
+      details: 'Please, check if the desired ID or Username is correctly typed'
+    })
+  }
 
   await next()
 }

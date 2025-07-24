@@ -1,3 +1,3 @@
 export default abstract class BaseService {
-  protected layer: string = 'Service';
+  protected layer: string = 'Service'
 }

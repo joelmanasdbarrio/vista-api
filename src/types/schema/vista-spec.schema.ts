@@ -4,2057 +4,2063 @@
  */
 
 export interface paths {
-  "/accounts": {
+  '/accounts': {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get accounts
-     * @description Get all accounts
-     */
-    get: operations["getAccounts"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
+         * Get accounts
+         * @description Get all accounts
+         */
+    get: operations['getAccounts']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
     /**
-     * Update account
-     * @description Update one account
-     */
-    patch: operations["updateAccount"];
-    trace?: never;
-  };
+         * Update account
+         * @description Update one account
+         */
+    patch: operations['updateAccount']
+    trace?: never
+  }
   [path: `/accounts/${string}`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get account
-     * @description Get one account
-     */
-    get: operations["getAccount"];
-    put?: never;
-    post?: never;
+         * Get account
+         * @description Get one account
+         */
+    get: operations['getAccount']
+    put?: never
+    post?: never
     /**
-     * Delete account
-     * @description Delete one account
-     */
-    delete: operations["deleteAccount"];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Delete account
+         * @description Delete one account
+         */
+    delete: operations['deleteAccount']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/accounts/${string}/establishments`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get account establishments
-     * @description Get account establishments
-     */
-    get: operations["getAccountEstablishments"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Get account establishments
+         * @description Get account establishments
+         */
+    get: operations['getAccountEstablishments']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/accounts/${string}/followers`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get account followers
-     * @description Get all account followers
-     */
-    get: operations["getAccountFollowers"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Get account followers
+         * @description Get all account followers
+         */
+    get: operations['getAccountFollowers']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/accounts/${string}/followings`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get account followings
-     * @description Get all account followings
-     */
-    get: operations["getAccountFollowings"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Get account followings
+         * @description Get all account followings
+         */
+    get: operations['getAccountFollowings']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/accounts/${string}/follow`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
-     * Follow account
-     * @description Follow account
-     */
-    post: operations["followAccount"];
+         * Follow account
+         * @description Follow account
+         */
+    post: operations['followAccount']
     /**
-     * Unfollow account
-     * @description Unfollow account
-     */
-    delete: operations["unfollowAccount"];
-    options?: never;
-    head?: never;
+         * Unfollow account
+         * @description Unfollow account
+         */
+    delete: operations['unfollowAccount']
+    options?: never
+    head?: never
     /**
-     * Update follow
-     * @description Update follow relationship
-     */
-    patch: operations["updateFollow"];
-    trace?: never;
-  };
-  "/follow-requests": {
+         * Update follow
+         * @description Update follow relationship
+         */
+    patch: operations['updateFollow']
+    trace?: never
+  }
+  '/follow-requests': {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get follow requests
-     * @description Get all follow requests
-     */
-    get: operations["getFollowRequests"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Get follow requests
+         * @description Get all follow requests
+         */
+    get: operations['getFollowRequests']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/follow-requests/${string}`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get follow request
-     * @description Get one follow request
-     */
-    get: operations["getFollowRequest"];
-    put?: never;
-    post?: never;
+         * Get follow request
+         * @description Get one follow request
+         */
+    get: operations['getFollowRequest']
+    put?: never
+    post?: never
     /**
-     * Delete follow request
-     * @description Delete one follow request
-     */
-    delete: operations["deleteFollowRequest"];
-    options?: never;
-    head?: never;
+         * Delete follow request
+         * @description Delete one follow request
+         */
+    delete: operations['deleteFollowRequest']
+    options?: never
+    head?: never
     /**
-     * Update follow request
-     * @description Update one follow request
-     */
-    patch: operations["updateFollowRequest"];
-    trace?: never;
-  };
-  "/notifications": {
+         * Update follow request
+         * @description Update one follow request
+         */
+    patch: operations['updateFollowRequest']
+    trace?: never
+  }
+  '/notifications': {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get notifications
-     * @description Get all notifications
-     */
-    get: operations["getNotifications"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Get notifications
+         * @description Get all notifications
+         */
+    get: operations['getNotifications']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/notifications/${string}`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
     /**
-     * Update notification
-     * @description Update one notification
-     */
-    patch: operations["updateNotification"];
-    trace?: never;
-  };
-  "/activities": {
+         * Update notification
+         * @description Update one notification
+         */
+    patch: operations['updateNotification']
+    trace?: never
+  }
+  '/activities': {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get activities
-     * @description Get all activities
-     */
-    get: operations["getActivities"];
-    put?: never;
+         * Get activities
+         * @description Get all activities
+         */
+    get: operations['getActivities']
+    put?: never
     /**
-     * Create activity
-     * @description Create activity
-     */
-    post: operations["createActivity"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Create activity
+         * @description Create activity
+         */
+    post: operations['createActivity']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/activities/${string}`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get activity
-     * @description Get one activity
-     */
-    get: operations["getActivity"];
-    put?: never;
-    post?: never;
+         * Get activity
+         * @description Get one activity
+         */
+    get: operations['getActivity']
+    put?: never
+    post?: never
     /**
-     * Delete activity
-     * @description Delete one activity
-     */
-    delete: operations["deleteActivity"];
-    options?: never;
-    head?: never;
+         * Delete activity
+         * @description Delete one activity
+         */
+    delete: operations['deleteActivity']
+    options?: never
+    head?: never
     /**
-     * Update activity
-     * @description Update one activity
-     */
-    patch: operations["updateActivity"];
-    trace?: never;
-  };
+         * Update activity
+         * @description Update one activity
+         */
+    patch: operations['updateActivity']
+    trace?: never
+  }
   [path: `/activities/${string}/participants`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get activity participants
-     * @description Get all activity participants
-     */
-    get: operations["getActivityParticipants"];
-    put?: never;
+         * Get activity participants
+         * @description Get all activity participants
+         */
+    get: operations['getActivityParticipants']
+    put?: never
     /**
-     * Join activity
-     * @description Join activity
-     */
-    post: operations["joinActivity"];
+         * Join activity
+         * @description Join activity
+         */
+    post: operations['joinActivity']
     /**
-     * Leave activity
-     * @description Leave activity
-     */
-    delete: operations["leaveActivity"];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/activities/categories": {
+         * Leave activity
+         * @description Leave activity
+         */
+    delete: operations['leaveActivity']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/activities/categories': {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get activity categories
-     * @description Get all activity categories
-     */
-    get: operations["getActivityCategories"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/establishments": {
+         * Get activity categories
+         * @description Get all activity categories
+         */
+    get: operations['getActivityCategories']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/establishments': {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get establishments
-     * @description Get all establishments
-     */
-    get: operations["getEstablishments"];
-    put?: never;
+         * Get establishments
+         * @description Get all establishments
+         */
+    get: operations['getEstablishments']
+    put?: never
     /**
-     * Create establishment
-     * @description Create establishment
-     */
-    post: operations["createEstablishment"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Create establishment
+         * @description Create establishment
+         */
+    post: operations['createEstablishment']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/establishments/${string}`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get establishment
-     * @description Get one establishment
-     */
-    get: operations["getEstablishment"];
-    put?: never;
-    post?: never;
+         * Get establishment
+         * @description Get one establishment
+         */
+    get: operations['getEstablishment']
+    put?: never
+    post?: never
     /**
-     * Delete establishment
-     * @description Delete one establishment
-     */
-    delete: operations["deleteEstablishment"];
-    options?: never;
-    head?: never;
+         * Delete establishment
+         * @description Delete one establishment
+         */
+    delete: operations['deleteEstablishment']
+    options?: never
+    head?: never
     /**
-     * Update establishment
-     * @description Update one establishment
-     */
-    patch: operations["updateEstablishment"];
-    trace?: never;
-  };
+         * Update establishment
+         * @description Update one establishment
+         */
+    patch: operations['updateEstablishment']
+    trace?: never
+  }
   [path: `/establishments/${string}/requests`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
-     * Get establishment requests
-     * @description Get all establishment requests
-     */
-    get: operations["getEstablishmentRequests"];
-    put?: never;
+         * Get establishment requests
+         * @description Get all establishment requests
+         */
+    get: operations['getEstablishmentRequests']
+    put?: never
     /**
-     * Create establishment request
-     * @description Create establishment request
-     */
-    post: operations["createEstablishmentRequest"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+         * Create establishment request
+         * @description Create establishment request
+         */
+    post: operations['createEstablishmentRequest']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   [path: `/establishments/${string}/requests/${string}`]: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
     /**
-     * Delete establishment request
-     * @description Delete one establishment request
-     */
-    delete: operations["deleteEstablishmentRequest"];
-    options?: never;
-    head?: never;
+         * Delete establishment request
+         * @description Delete one establishment request
+         */
+    delete: operations['deleteEstablishmentRequest']
+    options?: never
+    head?: never
     /**
-     * Update establishment request
-     * @description Update one establishment request
-     */
-    patch: operations["updateEstablishmentRequest"];
-    trace?: never;
-  };
+         * Update establishment request
+         * @description Update one establishment request
+         */
+    patch: operations['updateEstablishmentRequest']
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
   schemas: {
-    AccountDTO: components["schemas"]["AccountPersonalDTO"] | components["schemas"]["AccountEnterpriseDTO"];
+    AccountDTO: components['schemas']['AccountPersonalDTO'] | components['schemas']['AccountEnterpriseDTO']
     AccountPersonalDTO: {
       /**
-       * @default other
-       * @enum {string}
-       */
-      gender: "male" | "female" | "other";
+             * @default other
+             * @enum {string}
+             */
+      gender: 'male' | 'female' | 'other'
       /** Format: date */
-      birthdate?: string;
+      birthdate?: string
       /**
-       * @default personal
-       * @enum {string}
-       */
-      type: "personal";
-    } & (components["schemas"]["AccountBase"] & {
+             * @default personal
+             * @enum {string}
+             */
+      type: 'personal'
+    } & (components['schemas']['AccountBase'] & {
       /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      accountType: "AccountPersonalDTO";
-    });
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+      accountType: 'AccountPersonalDTO'
+    })
     AccountEnterpriseDTO: {
       /** @default false */
-      isVerified: boolean;
+      isVerified: boolean
       /**
-       * @default enterprise
-       * @enum {string}
-       */
-      type: "enterprise";
-    } & (components["schemas"]["AccountBase"] & {
+             * @default enterprise
+             * @enum {string}
+             */
+      type: 'enterprise'
+    } & (components['schemas']['AccountBase'] & {
       /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      accountType: "AccountEnterpriseDTO";
-    });
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+      accountType: 'AccountEnterpriseDTO'
+    })
     AccountBase: {
       /** Format: uuid */
-      id: string;
-      name: string;
-      username: string;
-      email: string;
-      biography?: string;
-      avatar?: string;
-      website?: string;
+      id: string
+      name: string
+      username: string
+      email: string
+      biography?: string
+      avatar?: string
+      website?: string
       /** @default false */
-      isPrivate: boolean;
+      isPrivate: boolean
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     FollowDTO: {
       /** Format: uuid */
-      id: string;
-      follower: components["schemas"]["AccountPersonalDTO"];
-      following: components["schemas"]["AccountDTO"];
+      id: string
+      follower: components['schemas']['AccountPersonalDTO']
+      following: components['schemas']['AccountDTO']
       /** @default true */
-      isMuted: boolean;
+      isMuted: boolean
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     FollowRequestDTO: {
       /** Format: uuid */
-      id: string;
-      requestFrom: components["schemas"]["AccountPersonalDTO"];
-      requestTo: components["schemas"]["AccountDTO"];
+      id: string
+      requestFrom: components['schemas']['AccountPersonalDTO']
+      requestTo: components['schemas']['AccountDTO']
       /**
-       * @default pending
-       * @enum {string}
-       */
-      status: "pending" | "approved" | "rejected";
+             * @default pending
+             * @enum {string}
+             */
+      status: 'pending' | 'approved' | 'rejected'
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     NotificationDTO: {
       /** Format: uuid */
-      id: string;
+      id: string
       /** @enum {string} */
-      type: "follow" | "followRequest" | "establishmentRequest" | "entry" | "activity" | "system";
-      content: string;
+      type: 'follow' | 'followRequest' | 'establishmentRequest' | 'entry' | 'activity' | 'system'
+      content: string
       /** @default false */
-      isRead: boolean;
-      owner: components["schemas"]["AccountDTO"];
-      relatedAccount?: components["schemas"]["AccountDTO"];
-      relatedActivity?: components["schemas"]["ActivityDTO"];
+      isRead: boolean
+      owner: components['schemas']['AccountDTO']
+      relatedAccount?: components['schemas']['AccountDTO']
+      relatedActivity?: components['schemas']['ActivityDTO']
       /** Format: date-time */
-      createdAt: string;
+      createdAt: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     AddressDTO: {
-      country: string;
-      postalCode: string;
-      city: string;
-      street: string;
-      number: string;
-      block?: string;
-      floor?: string;
-      stair?: string;
-      door?: string;
+      /** Format: uuid */
+      id?: string
+      country: string
+      postalCode: string
+      city: string
+      street: string
+      number: string
+      block?: string
+      floor?: string
+      stair?: string
+      door?: string
       coordinates: {
         /** Format: double */
-        latitude?: number;
+        latitude?: number
         /** Format: double */
-        longitude?: number;
-      };
+        longitude?: number
+      }
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
-    ActivityDTO: components["schemas"]["ActivityOnsiteDTO"] | components["schemas"]["ActivityOnlineDTO"];
+      updatedAt?: string
+    }
+    ActivityDTO: components['schemas']['ActivityOnsiteDTO'] | components['schemas']['ActivityOnlineDTO']
     ActivityOnsiteDTO: {
-      location: components["schemas"]["EstablishmentDTO"] | components["schemas"]["AddressDTO"];
+      location: components['schemas']['EstablishmentDTO'] | components['schemas']['AddressDTO']
       /**
-       * @default onsite
-       * @enum {string}
-       */
-      activityType: "onsite";
-    } & (components["schemas"]["ActivityBase"] & {
+             * @default onsite
+             * @enum {string}
+             */
+      type: 'onsite'
+    } & (components['schemas']['ActivityBase'] & {
       /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      activityType: "ActivityOnsiteDTO";
-    });
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+      activityType: 'ActivityOnsiteDTO'
+    })
     ActivityOnlineDTO: {
       location: {
-        url: string;
-      };
+        url: string
+      }
       /**
-       * @default online
-       * @enum {string}
-       */
-      activityType: "online";
-    } & (components["schemas"]["ActivityBase"] & {
+             * @default online
+             * @enum {string}
+             */
+      type: 'online'
+    } & (components['schemas']['ActivityBase'] & {
       /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      activityType: "ActivityOnlineDTO";
-    });
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+      activityType: 'ActivityOnlineDTO'
+    })
     ActivityBase: {
       /** Format: uuid */
-      id?: string;
-      owner: components["schemas"]["AccountDTO"];
-      category: components["schemas"]["ActivityCategoryDTO"];
-      title: string;
-      description: string;
+      id?: string
+      owner: components['schemas']['AccountDTO']
+      category: components['schemas']['ActivityCategoryDTO']
+      title: string
+      description: string
       /** @default [] */
-      images: string[];
+      images: string[]
       time: {
         /** Format: date-time */
-        start?: string;
+        start?: string
         /** Format: date-time */
-        end?: string;
-      };
+        end?: string
+      }
       price?: {
         /**
-         * Format: double
-         * @default 0
-         */
-        min: number;
+                 * Format: double
+                 * @default 0
+                 */
+        min: number
         /**
-         * Format: double
-         * @default 0
-         */
-        max: number;
-        currency?: string;
-      };
+                 * Format: double
+                 * @default 0
+                 */
+        max: number
+        currency?: string
+      }
       participants?: {
         /** Format: int32 */
-        min?: number;
+        min?: number
         /** Format: int32 */
-        max?: number;
-      };
+        max?: number
+      }
       /** @enum {string} */
-      language: "en" | "es";
-      website?: string;
+      language: 'en' | 'es'
+      website?: string
       /** @default true */
-      isDraft: boolean;
+      isDraft: boolean
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     ActivityCategoryDTO: {
       /** Format: uuid */
-      id: string;
-      parent?: components["schemas"]["ActivityCategoryDTO"];
-      name: string;
-      i18nKey: string;
-      icon: string;
-      color?: string;
+      id: string
+      parent?: components['schemas']['ActivityCategoryDTO']
+      name: string
+      i18nKey: string
+      icon: string
+      color?: string
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     ActivityParticipantDTO: {
       /** Format: uuid */
-      id: string;
-      activity: components["schemas"]["ActivityDTO"];
-      account: components["schemas"]["AccountPersonalDTO"];
+      id: string
+      activity: components['schemas']['ActivityDTO']
+      account: components['schemas']['AccountPersonalDTO']
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     EstablishmentDTO: {
       /** Format: uuid */
-      id?: string;
-      owner: components["schemas"]["AccountEnterpriseDTO"];
-      address: components["schemas"]["AddressDTO"];
-      name: string;
+      id?: string
+      owner: components['schemas']['AccountEnterpriseDTO']
+      address: components['schemas']['AddressDTO']
+      name: string
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     EstablishmentRequestDTO: {
       /** Format: uuid */
-      id?: string;
-      requestFromAccount: components["schemas"]["AccountEnterpriseDTO"];
-      requestForActivity: components["schemas"]["ActivityOnsiteDTO"];
-      requestToEstablishment: components["schemas"]["EstablishmentDTO"];
+      id?: string
+      requestFromAccount: components['schemas']['AccountEnterpriseDTO']
+      requestForActivity: components['schemas']['ActivityOnsiteDTO']
+      requestToEstablishment: components['schemas']['EstablishmentDTO']
       /** @enum {string} */
-      status?: "pending" | "approved" | "rejected";
+      status?: 'pending' | 'approved' | 'rejected'
       /** Format: date-time */
-      createdAt?: string;
+      createdAt?: string
       /** Format: date-time */
-      updatedAt?: string;
-    };
+      updatedAt?: string
+    }
     PaginatedDTO: {
       _meta?: {
         /** @example 1 */
-        page?: number;
+        page?: number
         /** @example 10 */
-        limit?: number;
+        limit?: number
         /** @example 0 */
-        results?: number;
+        results?: number
         /** @example 0 */
-        total?: number;
-      };
-    };
+        total?: number
+      }
+    }
     AccountsPaginatedDTO: {
-      data: components["schemas"]["AccountDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['AccountDTO']>
+    } & components['schemas']['PaginatedDTO']
     AccountsPersonalPaginatedDTO: {
-      data: components["schemas"]["AccountPersonalDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['AccountPersonalDTO']>
+    } & components['schemas']['PaginatedDTO']
     FollowRequestsPaginatedDTO: {
-      data: components["schemas"]["FollowRequestDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['FollowRequestDTO']>
+    } & components['schemas']['PaginatedDTO']
     NotificationsPaginatedDTO: {
-      data: components["schemas"]["NotificationDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['NotificationDTO']>
+    } & components['schemas']['PaginatedDTO']
     ActivitiesPaginatedDTO: {
-      data: components["schemas"]["ActivityDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['ActivityDTO']>
+    } & components['schemas']['PaginatedDTO']
     EstablishmentsPaginatedDTO: {
-      data: components["schemas"]["EstablishmentDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['EstablishmentDTO']>
+    } & components['schemas']['PaginatedDTO']
     EstablishmentRequestsPaginatedDTO: {
-      data: components["schemas"]["EstablishmentRequestDTO"][];
-    } & components["schemas"]["PaginatedDTO"];
+      data: Array<components['schemas']['EstablishmentRequestDTO']>
+    } & components['schemas']['PaginatedDTO']
     AccountsResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["AccountsPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['AccountsPaginatedDTO']
     AccountsPersonalResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["AccountsPersonalPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['AccountsPersonalPaginatedDTO']
     AccountResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["AccountDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['AccountDTO']
+    }
     FollowResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["FollowDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['FollowDTO']
+    }
     FollowRequestsResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["FollowRequestsPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['FollowRequestsPaginatedDTO']
     FollowRequestResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["FollowRequestDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['FollowRequestDTO']
+    }
     NotificationsResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["NotificationsPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['NotificationsPaginatedDTO']
     NotificationResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["NotificationDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['NotificationDTO']
+    }
     ActivitiesResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["ActivitiesPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['ActivitiesPaginatedDTO']
     ActivityResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["ActivityDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['ActivityDTO']
+    }
     ActivityParticipantsResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["AccountsPersonalPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['AccountsPersonalPaginatedDTO']
     ActivityParticipantResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["ActivityParticipantDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['ActivityParticipantDTO']
+    }
     ActivityCategoriesResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["ActivityCategoryDTO"][];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: Array<components['schemas']['ActivityCategoryDTO']>
+    }
     EstablishmentsResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["EstablishmentsPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['EstablishmentsPaginatedDTO']
     EstablishmentResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["EstablishmentDTO"];
-    };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['EstablishmentDTO']
+    }
     EstablishmentRequestsResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-    } & components["schemas"]["EstablishmentRequestsPaginatedDTO"];
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+    } & components['schemas']['EstablishmentRequestsPaginatedDTO']
     EstablishmentRequestResponse: {
       /**
-       * @default success
-       * @enum {string}
-       */
-      status: "success";
-      data: components["schemas"]["EstablishmentRequestDTO"];
-    };
-  };
+             * @default success
+             * @enum {string}
+             */
+      status: 'success'
+      data: components['schemas']['EstablishmentRequestDTO']
+    }
+  }
   responses: {
     /** @description Bad Request */
     BadRequestError: {
       headers: {
-        [name: string]: unknown;
-      };
+        [name: string]: unknown
+      }
       content: {
-        "application/json": {
+        'application/json': {
           /**
-           * @default error
-           * @enum {string}
-           */
-          status: "error";
+                     * @default error
+                     * @enum {string}
+                     */
+          status: 'error'
           /**
-           * Format: int32
-           * @example 400
-           */
-          statusCode?: number;
-          errors?: {
+                     * Format: int32
+                     * @example 400
+                     */
+          statusCode?: number
+          errors?: Array<{
             /** @example INVALID_EMAIL_FORMAT */
-            code?: string;
+            code?: string
             /** @example Email format not valid */
-            message?: string;
+            message?: string
             /** @example Use user@domain.com format */
-            details?: string;
-          }[];
-        };
-      };
-    };
+            details?: string
+          }>
+        }
+      }
+    }
     /** @description Unauthorized */
     UnauthorizedError: {
       headers: {
-        [name: string]: unknown;
-      };
+        [name: string]: unknown
+      }
       content: {
-        "application/json": {
+        'application/json': {
           /**
-           * @default error
-           * @enum {string}
-           */
-          status: "error";
+                     * @default error
+                     * @enum {string}
+                     */
+          status: 'error'
           /**
-           * Format: int32
-           * @example 401
-           */
-          statusCode?: number;
+                     * Format: int32
+                     * @example 401
+                     */
+          statusCode?: number
           error?: {
             /** @example UNAUTHORIZED */
-            code?: string;
+            code?: string
             /** @example Unauthorized */
-            message?: string;
+            message?: string
             /** @example You must be logged in to access this resource */
-            details?: string;
-          };
-        };
-      };
-    };
+            details?: string
+          }
+        }
+      }
+    }
     /** @description Forbidden */
     ForbiddenError: {
       headers: {
-        [name: string]: unknown;
-      };
+        [name: string]: unknown
+      }
       content: {
-        "application/json": {
+        'application/json': {
           /**
-           * @default error
-           * @enum {string}
-           */
-          status: "error";
+                     * @default error
+                     * @enum {string}
+                     */
+          status: 'error'
           /**
-           * Format: int32
-           * @example 403
-           */
-          statusCode?: number;
+                     * Format: int32
+                     * @example 403
+                     */
+          statusCode?: number
           error?: {
             /** @example FORBIDDEN */
-            code?: string;
+            code?: string
             /** @example Forbidden */
-            message?: string;
+            message?: string
             /** @example You do not have permission to access this resource */
-            details?: string;
-          };
-        };
-      };
-    };
+            details?: string
+          }
+        }
+      }
+    }
     /** @description Not Found */
     NotFoundError: {
       headers: {
-        [name: string]: unknown;
-      };
+        [name: string]: unknown
+      }
       content: {
-        "application/json": {
+        'application/json': {
           /**
-           * @default error
-           * @enum {string}
-           */
-          status: "error";
+                     * @default error
+                     * @enum {string}
+                     */
+          status: 'error'
           /**
-           * Format: int32
-           * @example 404
-           */
-          statusCode?: number;
+                     * Format: int32
+                     * @example 404
+                     */
+          statusCode?: number
           error?: {
             /** @example NOT_FOUND */
-            code?: string;
+            code?: string
             /** @example Resource not found */
-            message?: string;
+            message?: string
             /** @example The requested resource could not be found */
-            details?: string;
-          };
-        };
-      };
-    };
+            details?: string
+          }
+        }
+      }
+    }
     /** @description Internal Server Error */
     InternalServerError: {
       headers: {
-        [name: string]: unknown;
-      };
+        [name: string]: unknown
+      }
       content: {
-        "application/json": {
+        'application/json': {
           /**
-           * @default error
-           * @enum {string}
-           */
-          status: "error";
+                     * @default error
+                     * @enum {string}
+                     */
+          status: 'error'
           /**
-           * Format: int32
-           * @example 500
-           */
-          statusCode?: number;
+                     * Format: int32
+                     * @example 500
+                     */
+          statusCode?: number
           error?: {
             /** @example INTERNAL_SERVER_ERROR */
-            code?: string;
+            code?: string
             /** @example An unexpected error occurred */
-            message?: string;
+            message?: string
             /** @example Please try again later or contact support */
-            details?: string;
-          };
-        };
-      };
-    };
-  };
+            details?: string
+          }
+        }
+      }
+    }
+  }
   parameters: {
     /** @description Page number for pagination */
-    pageParam: number;
+    pageParam: number
     /** @description Number of items per page for pagination */
-    limitParam: number;
+    limitParam: number
     /** @description Account ID */
-    accountIdParam: string;
+    accountIdParam: string
     /** @description Account type */
-    accountTypeParam: "personal" | "enterprise";
+    accountTypeParam: 'personal' | 'enterprise'
     /** @description Account name */
-    accountNameParam: string;
+    accountNameParam: string
     /** @description Account username */
-    accountUsernameParam: string;
+    accountUsernameParam: string
     /** @description Follow request ID */
-    followRequestIdParam: string;
+    followRequestIdParam: string
     /** @description Notification ID */
-    notificationIdParam: string;
+    notificationIdParam: string
     /** @description Establishment ID */
-    establishmentIdParam: string;
+    establishmentIdParam: string
     /** @description Establishment name */
-    establishmentNameParam: string;
+    establishmentNameParam: string
     /** @description Establishment address */
-    establishmentAddressParam: string;
+    establishmentAddressParam: string
+    /** @description Establishment owner ID */
+    establishmentOwnerParam: string
     /** @description Establishment request ID */
-    establishmentRequestIdParam: string;
+    establishmentRequestIdParam: string
     /** @description Activity ID */
-    activityIdParam: string;
+    activityIdParam: string
     /** @description Activity title */
-    activityTitleParam: string;
+    activityTitleParam: string
     /** @description Activity description */
-    activityDescriptionParam: string;
+    activityDescriptionParam: string
     /** @description Activity category ID */
-    activityCategoryIdParam: string;
+    activityCategoryIdParam: string
     /** @description Activity min price */
-    activityMinPriceParam: number;
+    activityMinPriceParam: number
     /** @description Activity max price */
-    activityMaxPriceParam: number;
+    activityMaxPriceParam: number
     /** @description Activity language */
-    activityLanguageParam: string;
+    activityLanguageParam: string
     /** @description Activity type */
-    activityTypeParam: "onsite" | "online";
+    activityTypeParam: 'onsite' | 'online'
     /** @description Activity time start */
-    activityTimeStartParam: string;
+    activityTimeStartParam: string
     /** @description Activity time end */
-    activityTimeEndParam: string;
+    activityTimeEndParam: string
     /** @description Activity min participants */
-    activityMinParcipantsParam: number;
+    activityMinParcipantsParam: number
     /** @description Activity max participants */
-    activityMaxParcipantsParam: number;
+    activityMaxParcipantsParam: number
     /** @description Activity min entries */
-    activityMinEntriesParam: number;
+    activityMinEntriesParam: number
     /** @description Activity max entries */
-    activityMaxEntriesParam: number;
-  };
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    activityMaxEntriesParam: number
+  }
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 export interface operations {
   getAccounts: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Account type */
-        type?: components["parameters"]["accountTypeParam"];
+        type?: components['parameters']['accountTypeParam']
         /** @description Account name */
-        name?: components["parameters"]["accountNameParam"];
+        name?: components['parameters']['accountNameParam']
         /** @description Account username */
-        username?: components["parameters"]["accountUsernameParam"];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
+        username?: components['parameters']['accountUsernameParam']
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["AccountsResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['AccountsResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateAccount: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AccountDTO"];
-      };
-    };
+        'application/json': components['schemas']['AccountDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["AccountResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['AccountResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getAccount: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["AccountResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['AccountResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   deleteAccount: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getAccountEstablishments: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Establishment name */
-        name?: components["parameters"]["establishmentNameParam"];
+        name?: components['parameters']['establishmentNameParam']
         /** @description Establishment address */
-        address?: components["parameters"]["establishmentAddressParam"];
-      };
-      header?: never;
+        address?: components['parameters']['establishmentAddressParam']
+      }
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getAccountFollowers: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Account name */
-        name?: components["parameters"]["accountNameParam"];
+        name?: components['parameters']['accountNameParam']
         /** @description Account username */
-        username?: components["parameters"]["accountUsernameParam"];
-      };
-      header?: never;
+        username?: components['parameters']['accountUsernameParam']
+      }
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["AccountsPersonalResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['AccountsPersonalResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getAccountFollowings: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Account name */
-        name?: components["parameters"]["accountNameParam"];
+        name?: components['parameters']['accountNameParam']
         /** @description Account username */
-        username?: components["parameters"]["accountUsernameParam"];
-      };
-      header?: never;
+        username?: components['parameters']['accountUsernameParam']
+      }
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["AccountsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['AccountsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   followAccount: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Created */
       201: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["FollowResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['FollowResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   unfollowAccount: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateFollow: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Account ID */
-        id: components["parameters"]["accountIdParam"];
-      };
-      cookie?: never;
-    };
+        id: components['parameters']['accountIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["FollowDTO"];
-      };
-    };
+        'application/json': components['schemas']['FollowDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["FollowResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['FollowResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getFollowRequests: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
+        limit?: components['parameters']['limitParam']
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["FollowRequestsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['FollowRequestsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getFollowRequest: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Follow request ID */
-        id: components["parameters"]["followRequestIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['followRequestIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["FollowRequestResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['FollowRequestResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   deleteFollowRequest: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Follow request ID */
-        id: components["parameters"]["followRequestIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['followRequestIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateFollowRequest: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Follow request ID */
-        id: components["parameters"]["followRequestIdParam"];
-      };
-      cookie?: never;
-    };
+        id: components['parameters']['followRequestIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["FollowRequestDTO"];
-      };
-    };
+        'application/json': components['schemas']['FollowRequestDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["FollowRequestResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['FollowRequestResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getNotifications: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
+        limit?: components['parameters']['limitParam']
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["NotificationsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['NotificationsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateNotification: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Notification ID */
-        id: components["parameters"]["notificationIdParam"];
-      };
-      cookie?: never;
-    };
+        id: components['parameters']['notificationIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NotificationDTO"];
-      };
-    };
+        'application/json': components['schemas']['NotificationDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["NotificationResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['NotificationResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getActivities: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Activity type */
-        type?: components["parameters"]["activityTypeParam"];
+        type?: components['parameters']['activityTypeParam']
         /** @description Activity title */
-        title?: components["parameters"]["activityTitleParam"];
+        title?: components['parameters']['activityTitleParam']
         /** @description Activity description */
-        description?: components["parameters"]["activityDescriptionParam"];
+        description?: components['parameters']['activityDescriptionParam']
         /** @description Activity category ID */
-        categoryId?: components["parameters"]["activityCategoryIdParam"];
+        categoryId?: components['parameters']['activityCategoryIdParam']
         /** @description Activity min price */
-        minPrice?: components["parameters"]["activityMinPriceParam"];
+        minPrice?: components['parameters']['activityMinPriceParam']
         /** @description Activity max price */
-        maxPrice?: components["parameters"]["activityMaxPriceParam"];
+        maxPrice?: components['parameters']['activityMaxPriceParam']
         /** @description Activity time start */
-        timeStart?: components["parameters"]["activityTimeStartParam"];
+        timeStart?: components['parameters']['activityTimeStartParam']
         /** @description Activity time end */
-        timeEnd?: components["parameters"]["activityTimeEndParam"];
+        timeEnd?: components['parameters']['activityTimeEndParam']
         /** @description Activity min participants */
-        minParticipants?: components["parameters"]["activityMinParcipantsParam"];
+        minParticipants?: components['parameters']['activityMinParcipantsParam']
         /** @description Activity max participants */
-        maxParticipants?: components["parameters"]["activityMaxParcipantsParam"];
+        maxParticipants?: components['parameters']['activityMaxParcipantsParam']
         /** @description Activity min entries */
-        minEntries?: components["parameters"]["activityMinEntriesParam"];
+        minEntries?: components['parameters']['activityMinEntriesParam']
         /** @description Activity max entries */
-        maxEntries?: components["parameters"]["activityMaxEntriesParam"];
+        maxEntries?: components['parameters']['activityMaxEntriesParam']
         /** @description Activity language */
-        language?: components["parameters"]["activityLanguageParam"];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
+        language?: components['parameters']['activityLanguageParam']
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivitiesResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivitiesResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   createActivity: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ActivityDTO"];
-      };
-    };
+        'application/json': components['schemas']['ActivityDTO']
+      }
+    }
     responses: {
       /** @description Created */
       201: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivityResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivityResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getActivity: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Activity ID */
-        id: components["parameters"]["activityIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['activityIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivityResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivityResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   deleteActivity: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Activity ID */
-        id: components["parameters"]["activityIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['activityIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateActivity: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Activity ID */
-        id: components["parameters"]["activityIdParam"];
-      };
-      cookie?: never;
-    };
+        id: components['parameters']['activityIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ActivityDTO"];
-      };
-    };
+        'application/json': components['schemas']['ActivityDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivityResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivityResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getActivityParticipants: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Account name */
-        name?: components["parameters"]["accountNameParam"];
+        name?: components['parameters']['accountNameParam']
         /** @description Account username */
-        username?: components["parameters"]["accountUsernameParam"];
-      };
-      header?: never;
+        username?: components['parameters']['accountUsernameParam']
+      }
+      header?: never
       path: {
         /** @description Activity ID */
-        id: components["parameters"]["activityIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['activityIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivityParticipantsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivityParticipantsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   joinActivity: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Activity ID */
-        id: components["parameters"]["activityIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['activityIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Created */
       201: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivityParticipantResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivityParticipantResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   leaveActivity: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Activity ID */
-        id: components["parameters"]["activityIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['activityIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getActivityCategories: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["ActivityCategoriesResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['ActivityCategoriesResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getEstablishments: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
+        limit?: components['parameters']['limitParam']
         /** @description Establishment name */
-        name?: components["parameters"]["establishmentNameParam"];
+        name?: components['parameters']['establishmentNameParam']
         /** @description Establishment address */
-        address?: components["parameters"]["establishmentAddressParam"];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
+        address?: components['parameters']['establishmentAddressParam']
+        /** @description Establishment owner ID */
+        owner?: components['parameters']['establishmentOwnerParam']
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   createEstablishment: {
     parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EstablishmentDTO"];
-      };
-    };
+        'application/json': components['schemas']['EstablishmentDTO']
+      }
+    }
     responses: {
       /** @description Created */
       201: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getEstablishment: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['establishmentIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   deleteEstablishment: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['establishmentIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateEstablishment: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
-      };
-      cookie?: never;
-    };
+        id: components['parameters']['establishmentIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EstablishmentDTO"];
-      };
-    };
+        'application/json': components['schemas']['EstablishmentDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   getEstablishmentRequests: {
     parameters: {
       query?: {
         /** @description Page number for pagination */
-        page?: components["parameters"]["pageParam"];
+        page?: components['parameters']['pageParam']
         /** @description Number of items per page for pagination */
-        limit?: components["parameters"]["limitParam"];
-      };
-      header?: never;
+        limit?: components['parameters']['limitParam']
+      }
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        id: components['parameters']['establishmentIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentRequestsResponse"];
-        };
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentRequestsResponse']
+        }
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   createEstablishmentRequest: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
-      };
-      cookie?: never;
-    };
+        id: components['parameters']['establishmentIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EstablishmentRequestDTO"];
-      };
-    };
+        'application/json': components['schemas']['EstablishmentRequestDTO']
+      }
+    }
     responses: {
       /** @description Created */
       201: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentRequestResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentRequestResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   deleteEstablishmentRequest: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
+        id: components['parameters']['establishmentIdParam']
         /** @description Establishment request ID */
-        requestId: components["parameters"]["establishmentRequestIdParam"];
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
+        requestId: components['parameters']['establishmentRequestIdParam']
+      }
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description No Content */
       204: {
         headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
   updateEstablishmentRequest: {
     parameters: {
-      query?: never;
-      header?: never;
+      query?: never
+      header?: never
       path: {
         /** @description Establishment ID */
-        id: components["parameters"]["establishmentIdParam"];
+        id: components['parameters']['establishmentIdParam']
         /** @description Establishment request ID */
-        requestId: components["parameters"]["establishmentRequestIdParam"];
-      };
-      cookie?: never;
-    };
+        requestId: components['parameters']['establishmentRequestIdParam']
+      }
+      cookie?: never
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EstablishmentRequestDTO"];
-      };
-    };
+        'application/json': components['schemas']['EstablishmentRequestDTO']
+      }
+    }
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown;
-        };
+          [name: string]: unknown
+        }
         content: {
-          "application/json": components["schemas"]["EstablishmentRequestResponse"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      403: components["responses"]["ForbiddenError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
+          'application/json': components['schemas']['EstablishmentRequestResponse']
+        }
+      }
+      400: components['responses']['BadRequestError']
+      401: components['responses']['UnauthorizedError']
+      403: components['responses']['ForbiddenError']
+      404: components['responses']['NotFoundError']
+      500: components['responses']['InternalServerError']
+    }
+  }
 }

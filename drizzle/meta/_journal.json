@@ -22,6 +22,20 @@
       "when": 1752882771754,
       "tag": "0002_loud_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1753299751618,
+      "tag": "0003_modern_wither",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1753301395297,
+      "tag": "0004_melted_champions",
+      "breakpoints": true
     }
   ]
 }

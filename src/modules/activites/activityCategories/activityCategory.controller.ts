@@ -8,12 +8,12 @@ export default class ActivityCategoryController extends BaseController {
   protected resource = 'ActivityCategory'
   protected activityCategoryService: ActivityCategoryService
 
-  constructor() {
+  constructor () {
     super()
     this.activityCategoryService = new ActivityCategoryService()
   }
 
-  async getActivityCategories(c: Context): Promise<ActivityCategoriesResponse> {
+  async getActivityCategories (c: Context): Promise<ActivityCategoriesResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getActivityCategories' }
     logger.info('Get all Activity Categories', labels)
 

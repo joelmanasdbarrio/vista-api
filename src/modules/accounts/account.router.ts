@@ -1,14 +1,14 @@
 import { Context, Hono } from 'hono'
-import AccountController from './account.controller'
-import { protectedRoute } from '../auth/auth.middleware'
 import validate from '../../utils/error_handling/middlewares/validator.middleware'
-import { getAccountSchema, GetAccountsInput, getAccountsSchema, PatchAccountInput, patchAccountSchema } from './lib/account.validations'
+import { protectedRoute } from '../auth/auth.middleware'
+import AccountController from './account.controller'
+import { GetAccountInput, getAccountSchema, GetAccountsInput, getAccountsSchema, PatchAccountInput, patchAccountSchema } from './lib/account.validations'
 
 export default class AccountRouter {
   public router: Hono
   protected accountController: AccountController
 
-  constructor() {
+  constructor () {
     this.router = new Hono()
     this.accountController = new AccountController()
 
@@ -29,17 +29,14 @@ export default class AccountRouter {
         }
       )
       .delete('/',
-        async (c) => {
+        async (c: Context) => {
           await this.accountController.deleteAccount(c)
           return c.body(null, 204)
         }
       )
-
-    this.router
-      .all('/:id', protectedRoute)
       .get('/:id',
         validate('param', getAccountSchema),
-        async (c) => {
+        async (c: Context<any, any, GetAccountInput>) => {
           const res = await this.accountController.getAccount(c)
           return c.json({ ...res }, 200)
         }
@@ -48,4 +45,3 @@ export default class AccountRouter {
     // this.router.route('/:id', followRouter)
   }
 }
-

@@ -1,6 +1,6 @@
-import { Context } from "hono"
-import { createClient } from "@supabase/supabase-js"
-import { drizzle } from "drizzle-orm/postgres-js"
+import { Context } from 'hono'
+import { createClient } from '@supabase/supabase-js'
+import { drizzle } from 'drizzle-orm/postgres-js'
 
 export default abstract class BaseRepository implements Repository {
   protected layer: string = 'Repository'
@@ -8,7 +8,7 @@ export default abstract class BaseRepository implements Repository {
   protected drizzle
   protected c: Context
 
-  constructor(c: Context) {
+  constructor (c: Context) {
     this.c = c
     this.supabase = createClient(
       c.env.DATABASE_URL,
@@ -18,12 +18,12 @@ export default abstract class BaseRepository implements Repository {
     this.drizzle = drizzle(c.env.DATABASE_URL)
   }
 
-  abstract getAllPaginated(query: any): Promise<any>
-  abstract getAll(query: any): Promise<any>
-  abstract getOneById(id: string): Promise<any>
-  abstract createOne(data: any): Promise<any>
-  abstract updateOneById(id: string, data: any, obj: any): Promise<any>
-  abstract deleteOneById(id: string): Promise<void>
+  abstract getAllPaginated (query: any): Promise<any>
+  abstract getAll (query: any): Promise<any>
+  abstract getOneById (id: string): Promise<any>
+  abstract createOne (data: any): Promise<any>
+  abstract updateOneById (id: string, data: any): Promise<any>
+  abstract deleteOneById (id: string): Promise<void>
 }
 
 interface Repository {
@@ -31,6 +31,6 @@ interface Repository {
   getAll: (query: any) => Promise<any>
   getOneById: (id: string) => Promise<any>
   createOne: (data: any) => Promise<any>
-  updateOneById: (id: string, data: any, obj: any) => Promise<any>
+  updateOneById: (id: string, data: any) => Promise<any>
   deleteOneById: (id: string) => Promise<void>
 }

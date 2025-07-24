@@ -14,7 +14,8 @@
     "wrangler-secret:put": "wrangler secret put",
     "drizzle:generate": "npx drizzle-kit generate",
     "drizzle:migrate": "npx drizzle-kit migrate",
-    "types:generate": "npx openapi-typescript ./node_modules/@joelmanasdbarrio/vista-spec/openapi/openapi-rest.yaml --output ./src/types/schema/vista-spec.schema.ts --path-params-as-types"
+    "types:generate": "npx openapi-typescript ./node_modules/@joelmanasdbarrio/vista-spec/openapi/openapi-rest.yaml --output ./src/types/schema/vista-spec.schema.ts --path-params-as-types",
+    "lint": "ts-standard --fix \"src/**/*.ts\""
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.1",
@@ -26,9 +27,10 @@
     "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@joelmanasdbarrio/vista-spec": "1.1.2",
+    "@joelmanasdbarrio/vista-spec": "1.1.2-dev.95",
     "@types/node": "^22.15.29",
     "drizzle-kit": "^0.31.1",
+    "ts-standard": "^12.0.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "wrangler": "^4.24.3"

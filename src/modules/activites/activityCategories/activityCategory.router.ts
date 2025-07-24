@@ -6,7 +6,7 @@ export default class ActivityCategoryRouter {
   public router: Hono
   protected activityCategoryController: ActivityCategoryController
 
-  constructor() {
+  constructor () {
     this.router = new Hono()
     this.activityCategoryController = new ActivityCategoryController()
 

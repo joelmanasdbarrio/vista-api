@@ -1,26 +1,26 @@
 import { Context } from 'hono'
-import BaseController from '../base.controller'
-import Logger, { LogLabels } from '../../utils/logger'
-import AccountService from './account.service'
-import { AccountDTO, AccountResponse, AccountsPaginatedDTO, AccountsResponse } from '../../types/vista-spec.types'
-import AppError from '../../utils/error_handling/AppError'
-import { GetAccountsInput, PatchAccountInput } from './lib/account.validations'
 import '../../types/hono.types'
+import { AccountResponse, AccountsResponse } from '../../types/vista-spec.types'
+import AppError from '../../utils/error_handling/AppError'
+import Logger, { LogLabels } from '../../utils/logger'
+import BaseController from '../base.controller'
+import AccountService from './account.service'
+import { GetAccountInput, GetAccountsInput, PatchAccountInput } from './lib/account.validations'
 
 export default class AccountController extends BaseController {
   protected resource = 'Account'
   protected accountService: AccountService
 
-  constructor() {
+  constructor () {
     super()
     this.accountService = new AccountService()
   }
 
-  async getAccounts(c: Context<any, any, GetAccountsInput>): Promise<AccountsResponse> {
+  async getAccounts (c: Context<any, any, GetAccountsInput>): Promise<AccountsResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAccounts' }
     Logger.info('Get all Account documents paginated', labels)
 
-    const { data, _meta } = await this.accountService.getAllAccountsPaginated(c, c.req.valid('query')) as AccountsPaginatedDTO
+    const { data, _meta } = await this.accountService.getAllAccountsPaginated(c, c.req.valid('query'))
 
     Logger.info(`Found ${data.length} account(s)`, labels)
     Logger.debug(data)
@@ -32,14 +32,14 @@ export default class AccountController extends BaseController {
     }
   }
 
-  async getAccount(c: Context): Promise<AccountResponse> {
+  async getAccount (c: Context<any, any, GetAccountInput>): Promise<AccountResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAccount' }
     Logger.info('Get Account document by ID or username', labels)
 
     const idOrUsername = c.req.param('id')
-    const account = await this.accountService.getOneAccount(c, idOrUsername) as AccountDTO
+    const account = await this.accountService.getOneAccount(c, { id: idOrUsername })
 
-    if (!account) {
+    if (account == null) {
       throw new AppError(404, `Account with ID or Username "${idOrUsername}" not found`, {
         code: 'ACCOUNT_NOT_FOUND',
         message: `Account with ID or Username "${idOrUsername}" not found`,
@@ -56,20 +56,12 @@ export default class AccountController extends BaseController {
     }
   }
 
-  async updateAccount(c: Context<any, any, PatchAccountInput>): Promise<AccountResponse> {
+  async updateAccount (c: Context<any, any, PatchAccountInput>): Promise<AccountResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateAccount' }
     Logger.info('Update Account document', labels)
 
-    const body = c.req.valid('json') as AccountDTO
-    const account = await this.accountService.updateOneAccount(c, body) as AccountDTO
-
-    if (!account) {
-      throw new AppError(404, `Account with ID or Username "${body.id}" not found`, {
-        code: 'ACCOUNT_NOT_FOUND',
-        message: `Account with ID or Username "${body.id}" not found`,
-        details: 'Please, check if the desired ID or Username is correctly typed'
-      })
-    }
+    const body = c.req.valid('json')
+    const account = await this.accountService.updateOneAccount(c, body)
 
     Logger.info(`Updated account "${account.username}" (${account.id})`, labels)
     Logger.debug(account)
@@ -80,14 +72,13 @@ export default class AccountController extends BaseController {
     }
   }
 
-  async deleteAccount(c: Context): Promise<void> {
+  async deleteAccount (c: Context): Promise<void> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteAccount' }
     Logger.info('Delete Account document by ID', labels)
 
-    const user = c.get('user') as AccountDTO
+    const user = c.get('user')
     await this.accountService.deleteOneAccount(c)
 
     Logger.info(`Deleted account "${user.name}" (${user.id})`, labels)
-    Logger.debug(user)
   }
 }

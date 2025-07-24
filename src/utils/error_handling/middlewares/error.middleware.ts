@@ -2,7 +2,6 @@ import logger from '../../logger.js'
 import AppError from '../AppError.js'
 import { Context } from 'hono'
 
-
 /**
  * Logs and returns the complete error message in development mode for debugging
  */
@@ -29,7 +28,7 @@ const prodError = (err: AppError, c: Context) => {
       status: 'error',
       statusCode: 500,
       error: {
-        code: err.errors ? err.errors[0].code : err.error?.code,
+        code: (err.errors != null) ? err.errors[0].code : err.error?.code,
         message: 'An unexpected error occurred',
         details: 'Please try again later or contact support'
       }
@@ -37,7 +36,7 @@ const prodError = (err: AppError, c: Context) => {
   }
 }
 
-export default function globalErrorHandler(err: any, c: Context) {
+export default function globalErrorHandler (err: any, c: Context) {
   // Ensure the error is always an AppError
   if (!(err instanceof AppError)) {
     err = new AppError(500, err.message || 'Internal Server Error', { code: err.code || 'INTERNAL_SERVER_ERROR', message: err.message })
