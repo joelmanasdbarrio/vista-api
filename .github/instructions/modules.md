@@ -1,0 +1,5 @@
+- Follow Domain-Driven Design (DDD) principles, each module should encapsulate its own functionality.
+- Each module should have its own directory under `src/modules/` or be a submodule of an existing one.
+- **Submodules**: Modules can contain submodules (e.g., `establishments/addresses`, `establishments/establishmentRequests`) that handle related but distinct domain concepts.
+- **Service-only modules**: Some submodules may only contain services and related files (mapper, repository, validations) without controllers or routers, designed to be used by other modules.
+- **Cross-module dependencies**: Modules can import and use services from other modules when business logic requires it, maintaining clear separation of concerns.

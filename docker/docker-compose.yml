@@ -1,0 +1,27 @@
+name: Vista 3 Test Environment
+services:
+  db:
+    image: postgis/postgis:13-3.3-alpine
+    container_name: vista_postgres
+    environment:
+      POSTGRES_USER: testusr
+      POSTGRES_PASSWORD: testpwd
+      POSTGRES_DB: vista_db
+    ports:
+      - "5432:5432"
+    hostname: vista_postgres
+  admin:
+    image: dpage/pgadmin4:snapshot
+    container_name: vista_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.com
+      PGADMIN_DEFAULT_PASSWORD: adminpwd
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - ./pgadmin/pgpass:/var/lib/pgadmin/pgpass:ro
+    depends_on:
+      - db

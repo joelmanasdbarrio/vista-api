@@ -1,5 +1,5 @@
 {
-  "id": "a32121d2-4b6c-4f86-a506-e4fb6a43539c",
+  "id": "7089df76-c876-4773-a53b-5707662b0e10",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -36,7 +36,8 @@
           "name": "biography",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "''"
         },
         "gender": {
           "name": "gender",
@@ -56,13 +57,15 @@
           "name": "avatar",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "''"
         },
         "website": {
           "name": "website",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "''"
         },
         "is_private": {
           "name": "is_private",
@@ -84,7 +87,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'personal_account'"
+          "default": "'personal'"
         },
         "created_at": {
           "name": "created_at",
@@ -160,10 +163,6 @@
         "account_username_check": {
           "name": "account_username_check",
           "value": "char_length(\"account\".\"username\") >= 3 AND char_length(\"account\".\"username\") <= 30 AND \"account\".\"username\" ~ '^[a-z_0-9]+$'"
-        },
-        "account_email_check": {
-          "name": "account_email_check",
-          "value": "\"account\".\"email\" ~ '^[A-Za-z0-9._%+-]+@(?:gmail|hotmail|outlook|yahoo|icloud|aol|zoho|mail|protonmail|inbox|gmx|yandex|mailinator|disroot|tutanota|fastmail|startmail|runbox|hushmail|mailfence|posteo|riseup|kolabnow|mailbox|openmailbox|airmail|comcast|att|verizon|shaw|telus|charter|frontier|cox|btinternet|talktalk|virginmedia|sky|o2|orange|free|sfr|numericable|laposte|bouyguestelecom|neuf|alice|libero)\\.[A-Za-z]{2,}$'"
         },
         "account_age_check": {
           "name": "account_age_check",
@@ -374,6 +373,124 @@
         "activity_price_check": {
           "name": "activity_price_check",
           "value": "(\"activity\".\"price_min\" >= 0) AND (\"activity\".\"price_max\" >= 0) AND (\"activity\".\"price_min\" <= \"activity\".\"price_max\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.activity_category": {
+      "name": "activity_category",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "i18nKey": {
+          "name": "i18nKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "icon": {
+          "name": "icon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "color": {
+          "name": "color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "activity_category_i18nkey_idx": {
+          "name": "activity_category_i18nkey_idx",
+          "columns": [
+            {
+              "expression": "i18nKey",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "activity_category_parent_id_fkey": {
+          "name": "activity_category_parent_id_fkey",
+          "tableFrom": "activity_category",
+          "tableTo": "activity_category",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "activity_category_name_unique": {
+          "name": "activity_category_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "activity_category_i18nKey_unique": {
+          "name": "activity_category_i18nKey_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "i18nKey"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "activity_category_parent_id_check": {
+          "name": "activity_category_parent_id_check",
+          "value": "(\"activity_category\".\"parent_id\" IS NULL OR \"activity_category\".\"parent_id\" != \"activity_category\".\"id\")"
+        },
+        "activity_category_required_check": {
+          "name": "activity_category_required_check",
+          "value": "((\"activity_category\".\"parent_id\" IS NOT NULL AND \"activity_category\".\"icon\" IS NOT NULL) OR (\"activity_category\".\"parent_id\" IS NULL AND \"activity_category\".\"color\" IS NOT NULL))"
         }
       },
       "isRLSEnabled": false
@@ -628,124 +745,6 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.activity_category": {
-      "name": "activity_category",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "parent_id": {
-          "name": "parent_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "i18nkey": {
-          "name": "i18nkey",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "icon": {
-          "name": "icon",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "color": {
-          "name": "color",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "activity_category_i18nkey_idx": {
-          "name": "activity_category_i18nkey_idx",
-          "columns": [
-            {
-              "expression": "i18nkey",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "activity_category_parent_id_fkey": {
-          "name": "activity_category_parent_id_fkey",
-          "tableFrom": "activity_category",
-          "tableTo": "activity_category",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "activity_category_name_unique": {
-          "name": "activity_category_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        },
-        "activity_category_i18nkey_unique": {
-          "name": "activity_category_i18nkey_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "i18nkey"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {
-        "activity_category_parent_id_check": {
-          "name": "activity_category_parent_id_check",
-          "value": "(\"activity_category\".\"parent_id\" IS NULL OR \"activity_category\".\"parent_id\" != \"activity_category\".\"id\")"
-        },
-        "activity_category_required_check": {
-          "name": "activity_category_required_check",
-          "value": "((\"activity_category\".\"parent_id\" IS NOT NULL AND \"activity_category\".\"icon\" IS NOT NULL) OR (\"activity_category\".\"parent_id\" IS NULL AND \"activity_category\".\"color\" IS NOT NULL))"
-        }
-      },
       "isRLSEnabled": false
     },
     "public.address": {
@@ -1019,14 +1018,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "request_from_account_id": {
-          "name": "request_from_account_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "request_for_activity_id": {
-          "name": "request_for_activity_id",
+        "request_from_activity_id": {
+          "name": "request_from_activity_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1065,13 +1058,7 @@
           "name": "establishment_request_unique_idx",
           "columns": [
             {
-              "expression": "request_from_account_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "request_for_activity_id",
+              "expression": "request_from_activity_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1090,25 +1077,12 @@
         }
       },
       "foreignKeys": {
-        "establishment_request_request_from_account_id_account_id_fk": {
-          "name": "establishment_request_request_from_account_id_account_id_fk",
-          "tableFrom": "establishment_request",
-          "tableTo": "account",
-          "columnsFrom": [
-            "request_from_account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "establishment_request_request_for_activity_id_activity_id_fk": {
-          "name": "establishment_request_request_for_activity_id_activity_id_fk",
+        "establishment_request_request_from_activity_id_activity_id_fk": {
+          "name": "establishment_request_request_from_activity_id_activity_id_fk",
           "tableFrom": "establishment_request",
           "tableTo": "activity",
           "columnsFrom": [
-            "request_for_activity_id"
+            "request_from_activity_id"
           ],
           "columnsTo": [
             "id"
@@ -1401,8 +1375,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Notification": {
-      "name": "Notification",
+    "public.notification": {
+      "name": "notification",
       "schema": "",
       "columns": {
         "id": {
@@ -1498,9 +1472,9 @@
         }
       },
       "foreignKeys": {
-        "Notification_owner_id_account_id_fk": {
-          "name": "Notification_owner_id_account_id_fk",
-          "tableFrom": "Notification",
+        "notification_owner_id_account_id_fk": {
+          "name": "notification_owner_id_account_id_fk",
+          "tableFrom": "notification",
           "tableTo": "account",
           "columnsFrom": [
             "owner_id"
@@ -1511,9 +1485,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "Notification_related_account_id_account_id_fk": {
-          "name": "Notification_related_account_id_account_id_fk",
-          "tableFrom": "Notification",
+        "notification_related_account_id_account_id_fk": {
+          "name": "notification_related_account_id_account_id_fk",
+          "tableFrom": "notification",
           "tableTo": "account",
           "columnsFrom": [
             "related_account_id"
@@ -1524,9 +1498,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "Notification_related_activity_id_activity_id_fk": {
-          "name": "Notification_related_activity_id_activity_id_fk",
-          "tableFrom": "Notification",
+        "notification_related_activity_id_activity_id_fk": {
+          "name": "notification_related_activity_id_activity_id_fk",
+          "tableFrom": "notification",
           "tableTo": "activity",
           "columnsFrom": [
             "related_activity_id"
@@ -1550,8 +1524,8 @@
       "name": "account_type",
       "schema": "public",
       "values": [
-        "personal_account",
-        "enterprise_account"
+        "personal",
+        "enterprise"
       ]
     },
     "public.activity_language": {
