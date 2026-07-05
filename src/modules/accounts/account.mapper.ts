@@ -1,10 +1,10 @@
-import { sql } from 'drizzle-orm'
-import { Account } from '../../db/schema'
+import { AccountDB, NewAccountDB } from 'src/types/database.types'
 import { AccountDTO, AccountEnterpriseDTO, AccountPersonalDTO, AccountTypeEnum } from '../../types/vista-spec.types'
 import AppError from '../../utils/error_handling/AppError'
+import BaseMapper from '../base.mapper'
 
-export default class AccountMapper {
-  toDTO (input: typeof Account.$inferSelect): AccountDTO {
+export default class AccountMapper extends BaseMapper<AccountDB, AccountDTO> {
+  async toDTO (input: AccountDB): Promise<AccountDTO> {
     if (input.type === AccountTypeEnum.PERSONAL) {
       const personalDTO: AccountPersonalDTO = {
         id: input.id,
@@ -41,31 +41,29 @@ export default class AccountMapper {
       }
       return enterpriseDTO
     } else {
-      throw new AppError(
-        400,
-        `Unknown account type: "${String(input.type)}"`,
-        {
-          code: 'UNKNOOWN_ACCOUNT_TYPE',
-          message: `Unknown account type: "${String(input.type)}"`,
-          details: `Please, use one of the available account types: ${AccountTypeEnum.PERSONAL}, ${AccountTypeEnum.ENTERPRISE}`
-        }
-      )
+      throw new AppError(400, 'Invalid Account type', {
+        code: 'INVALID_ACCOUNT_TYPE',
+        message: 'Invalid Account type',
+        details: `The account type "${String(input.type)}" is not supported. Please, use ${Object.values(AccountTypeEnum).join(', ')} instead.`
+      })
     }
   }
 
-  toDTOs (input: Array<typeof Account.$inferSelect>): AccountDTO[] {
-    return input.map(this.toDTO)
+  async toDTOs (input: AccountDB[]): Promise<AccountDTO[]> {
+    return await Promise.all(input.map(this.toDTO))
   }
 
-  toDB (data: AccountDTO): typeof Account.$inferInsert {
-    const output: Record<string, any> = {
+  toDB (data: AccountDTO): NewAccountDB {
+    const output: NewAccountDB = {
+      id: data.id,
       name: data.name,
       username: data.username,
+      email: data.email,
       biography: data.biography,
       avatar: data.avatar,
       website: data.website,
       is_private: data.isPrivate,
-      updated_at: sql`NOW()`
+      updated_at: new Date()
     }
 
     if (data.type === 'personal') {
@@ -74,7 +72,7 @@ export default class AccountMapper {
         ? data.gender
         : data.gender ?? null
       output.birthdate = data.birthdate !== undefined
-        ? data.birthdate
+        ? (data.birthdate !== null ? new Date(data.birthdate) : null)
         : data.birthdate ?? null
     } else if (data.type === 'enterprise') {
       output.type = AccountTypeEnum.ENTERPRISE
@@ -83,6 +81,6 @@ export default class AccountMapper {
         : data.isVerified ?? false
     }
 
-    return output as typeof Account.$inferInsert
+    return output
   }
 }

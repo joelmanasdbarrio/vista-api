@@ -41,21 +41,38 @@ export default class AccountService extends BaseService {
     return account
   }
 
+  async getOneAccountByEmail (c: Context, { email }: { email: string }): Promise<AccountDTO | undefined> {
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneAccountByEmail' }
+    Logger.info(`Get Account document by email "${email}"`, labels)
+
+    const accountRepository = new AccountRepository(c)
+    const account = await accountRepository.getOneByEmail(email)
+    return account
+  }
+
   async updateOneAccount (c: Context, body: PatchAccountBody): Promise<AccountDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneAccount' }
     Logger.info('Update Account document', labels)
 
     const user = c.get('user')
 
-    if (body.type === AccountTypeEnum.PERSONAL) {
+    if ((body.id !== null) && (body.id !== user.id)) {
+      throw new AppError(400, 'Bad Request', {
+        code: 'ACCOUNT_ID_MISMATCH',
+        message: 'Account ID mismatch',
+        details: 'The provided ID does not match the owner Account ID.'
+      })
+    }
+
+    if (body.accountType === AccountTypeEnum.PERSONAL) {
       return await this.updatePersonalAccount(c, body, user as AccountPersonalDTO)
-    } else if (body.type === AccountTypeEnum.ENTERPRISE) {
+    } else if (body.accountType === AccountTypeEnum.ENTERPRISE) {
       return await this.updateEnterpriseAccount(c, body, user as AccountEnterpriseDTO)
     } else {
-      throw new AppError(400, 'Invalid account type', {
+      throw new AppError(400, 'Invalid Account type', {
         code: 'INVALID_ACCOUNT_TYPE',
-        message: 'Invalid account type',
-        details: 'Account type mismatch.'
+        message: 'Invalid Account type',
+        details: `The account type "${String(body.accountType)}" is not supported. Please, use ${Object.values(AccountTypeEnum).join(', ')} instead.`
       })
     }
   }
@@ -72,9 +89,8 @@ export default class AccountService extends BaseService {
       biography: body.biography ?? user.biography,
       avatar: body.avatar ?? user.avatar,
       website: body.website ?? user.website,
-      updatedAt: new Date().toISOString(),
       gender: body.gender ?? user.gender,
-      birthdate: body.birthdate
+      birthdate: (body.birthdate != null)
         ? body.birthdate.toISOString()
         : user.birthdate
           ? user.birthdate
@@ -100,7 +116,6 @@ export default class AccountService extends BaseService {
       biography: body.biography ?? user.biography,
       avatar: body.avatar ?? user.avatar,
       website: body.website ?? user.website,
-      updatedAt: new Date().toISOString(),
       isVerified: user.type === AccountTypeEnum.ENTERPRISE ? user.isVerified ?? false : false,
       isPrivate: body.isPrivate ?? user.isPrivate ?? false,
       type: AccountTypeEnum.ENTERPRISE,

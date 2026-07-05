@@ -12,9 +12,10 @@ export default class ActivityCategoryRouter {
 
     this.router
       .all('/', protectedRoute)
-      .get('/', async (c) => {
-        const res = await this.activityCategoryController.getActivityCategories(c)
-        return c.json({ ...res }, 200)
-      })
+      .get('/',
+        async (c) => {
+          const res = await this.activityCategoryController.getActivityCategories(c)
+          return c.json({ ...res }, 200)
+        })
   }
 }

@@ -1,7 +1,7 @@
 import { Context } from 'hono'
-import BaseController from '../../base.controller'
-import logger, { LogLabels } from '../../../utils/logger'
 import { ActivityCategoriesResponse } from '../../../types/vista-spec.types'
+import logger, { LogLabels } from '../../../utils/logger'
+import BaseController from '../../base.controller'
 import ActivityCategoryService from './activityCategory.service'
 
 export default class ActivityCategoryController extends BaseController {
@@ -15,7 +15,7 @@ export default class ActivityCategoryController extends BaseController {
 
   async getActivityCategories (c: Context): Promise<ActivityCategoriesResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getActivityCategories' }
-    logger.info('Get all Activity Categories', labels)
+    logger.info('Get all Activity Category documents', labels)
 
     const activityCategories = await this.activityCategoryService.getAllActivityCategories(c)
 

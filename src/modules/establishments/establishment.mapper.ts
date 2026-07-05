@@ -1,27 +1,48 @@
-import { sql } from 'drizzle-orm'
 import { Context } from 'hono'
-import { Establishment } from '../../db/schema'
-import { AccountTypeEnum, AddressDTO, EstablishmentDTO } from '../../types/vista-spec.types'
+import { EstablishmentDB, NewEstablishmentDB } from 'src/types/database.types'
+import getId from 'src/utils/getId'
+import { AccountTypeEnum, EstablishmentDTO } from '../../types/vista-spec.types'
 import AppError from '../../utils/error_handling/AppError'
 import AccountService from '../accounts/account.service'
+import BaseMapper from '../base.mapper'
 import AddressService from './addresses/address.service'
 
-export default class EstablishmentMapper {
+export default class EstablishmentMapper extends BaseMapper<EstablishmentDB, EstablishmentDTO> {
   private readonly c: Context
 
   constructor (c: Context) {
+    super()
     this.c = c
   }
 
-  async toDTO (input: typeof Establishment.$inferSelect): Promise<EstablishmentDTO> {
+  async toDTO (input: EstablishmentDB): Promise<EstablishmentDTO> {
     const accountService = new AccountService()
     const ownerDTO = await accountService.getOneAccount(this.c, { id: input.owner_id })
-    if (ownerDTO == null) throw new AppError(404, 'Establishment owner not found', { code: 'ESTABLISHMENT_OWNER_NOT_FOUND', message: 'Establishment owner not found' })
-    if (ownerDTO.type !== AccountTypeEnum.ENTERPRISE) throw new AppError(400, 'Establishment owner must be an enterprise', { code: 'ESTABLISHMENT_OWNER_NOT_ENTERPRISE', message: 'Establishment owner must be an enterprise' })
+    if (ownerDTO == null) {
+      throw new AppError(404, `Establishment owner with ID "${input.owner_id}" not found`, {
+        code: 'ESTABLISHMENT_OWNER_NOT_FOUND',
+        message: `Establishment owner with ID "${input.owner_id}" not found`,
+        details: 'Please, check if the establishment owner ID is correct.'
+      })
+    }
+
+    if (ownerDTO.type !== AccountTypeEnum.ENTERPRISE) {
+      throw new AppError(400, 'Invalid Account type', {
+        code: 'INVALID_ACCOUNT_TYPE',
+        message: 'Invalid Account type',
+        details: `The establishment owner account type "${ownerDTO.type}" is not supported. Please, use "${AccountTypeEnum.ENTERPRISE}" account type for establishment owners instead.`
+      })
+    }
 
     const addressService = new AddressService()
-    const addressDTO: AddressDTO = await addressService.getOneAddress(this.c, { id: input.address_id }) as AddressDTO
-    if (addressDTO == null) throw new AppError(404, 'Establishment address not found', { code: 'ESTABLISHMENT_ADDRESS_NOT_FOUND', message: 'Establishment address not found' })
+    const addressDTO = await addressService.getOneAddress(this.c, { id: input.address_id })
+    if (addressDTO == null) {
+      throw new AppError(404, `Establishment address with ID "${input.address_id}" not found`, {
+        code: 'ESTABLISHMENT_ADDRESS_NOT_FOUND',
+        message: `Establishment address with ID "${input.address_id}" not found`,
+        details: 'Please, check if the establishment address ID is correct.'
+      })
+    }
 
     return {
       id: input.id,
@@ -33,18 +54,34 @@ export default class EstablishmentMapper {
     }
   }
 
-  async toDTOs (inputs: Array<typeof Establishment.$inferSelect>): Promise<EstablishmentDTO[]> {
+  async toDTOs (inputs: EstablishmentDB[]): Promise<EstablishmentDTO[]> {
     return await Promise.all(inputs.map(async input => await this.toDTO(input)))
   }
 
-  toDB (data: EstablishmentDTO): typeof Establishment.$inferInsert {
-    const output: Record<string, any> = {
-      name: data.name,
-      owner_id: data.owner.id,
-      address_id: data.address.id,
-      updated_at: sql`NOW()`
+  toDB (data: EstablishmentDTO): NewEstablishmentDB {
+    const ownerId = getId(data.owner)
+    if (!ownerId) {
+      throw new AppError(400, 'Establishment owner ID is required', {
+        code: 'ESTABLISHMENT_OWNER_ID_REQUIRED',
+        message: 'Establishment owner ID is required',
+        details: 'Please, provide a valid owner ID for the establishment.'
+      })
     }
 
-    return output as typeof Establishment.$inferInsert
+    const addressId = getId(data.address)
+    if (!addressId) {
+      throw new AppError(400, 'Establishment address ID is required', {
+        code: 'ESTABLISHMENT_ADDRESS_ID_REQUIRED',
+        message: 'Establishment address ID is required',
+        details: 'Please, provide a valid address ID for the establishment.'
+      })
+    }
+
+    return {
+      name: data.name,
+      owner_id: ownerId,
+      address_id: addressId,
+      updated_at: new Date()
+    }
   }
 }

@@ -1,5 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { Context } from 'hono'
+import { AddressDB, NewAddressDB } from 'src/types/database.types'
+import AppError from 'src/utils/error_handling/AppError'
 import { Address } from '../../../db/schema'
 import { AddressDTO } from '../../../types/vista-spec.types'
 import Logger, { LogLabels } from '../../../utils/logger'
@@ -19,63 +21,63 @@ export default class AddressRepository extends BaseRepository {
    * @deprecated
    */
   async getAllPaginated (query: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   /**
    * @deprecated
    */
   async getAll (query: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   async getOneById (id: string): Promise<AddressDTO | undefined> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneById' }
-    Logger.info('Get Address document by ID', labels)
+    Logger.info(`Get Address document by ID "${id}"`, labels)
 
-    const [addressDB]: Array<typeof Address.$inferSelect> = await this.drizzle
+    const [addressDB]: AddressDB[] = await this.drizzle
       .select()
       .from(Address)
       .where(
         eq(Address.id, id)
       )
 
-    return this.addressMapper.toDTO(addressDB)
+    return await this.addressMapper.toDTO(addressDB)
   }
 
   async createOne (data: AddressDTO): Promise<any> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createOne' }
     Logger.info('Create Address document', labels)
 
-    const addressData: typeof Address.$inferInsert = this.addressMapper.toDB(data)
+    const addressData: NewAddressDB = this.addressMapper.toDB(data)
 
-    const [addressDB]: Array<typeof Address.$inferSelect> = await this.drizzle
+    const [addressDB]: AddressDB[] = await this.drizzle
       .insert(Address)
       .values(addressData)
       .returning()
 
-    return this.addressMapper.toDTO(addressDB)
+    return await this.addressMapper.toDTO(addressDB)
   }
 
   async updateOneById (id: string, data: AddressDTO): Promise<AddressDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneById' }
-    Logger.info('Update Address document', labels)
+    Logger.info(`Update Address document by ID "${id}"`, labels)
 
-    const updates: typeof Address.$inferInsert = this.addressMapper.toDB(data)
+    const updates: NewAddressDB = this.addressMapper.toDB(data)
 
-    const [addressDB]: Array<typeof Address.$inferSelect> = await this.drizzle
+    const [addressDB]: AddressDB[] = await this.drizzle
       .update(Address)
       .set(updates)
       .where(eq(Address.id, id))
       .returning()
 
-    return this.addressMapper.toDTO(addressDB)
+    return await this.addressMapper.toDTO(addressDB)
   }
 
   /**
    * @deprecated
    */
   async deleteOneById (id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 }

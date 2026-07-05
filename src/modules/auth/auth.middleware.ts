@@ -1,5 +1,6 @@
 import { Context, Next } from 'hono'
 import { verify } from 'hono/jwt'
+import config from 'src/utils/config'
 import '../../types/hono.types'
 import AppError from '../../utils/error_handling/AppError'
 import Logger from '../../utils/logger'
@@ -18,7 +19,7 @@ export const protectedRoute = async (c: Context, next: Next) => {
     throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'You must be logged in to access this resource' })
   }
 
-  await verify(token, c.env.SUPABASE_JWT_SECRET, 'HS256')
+  await verify(token, config.get(c, 'SUPABASE_JWT_SECRET'), 'HS256')
     .then(async payload => {
       if (payload.sub) {
         const accountService = new AccountService()

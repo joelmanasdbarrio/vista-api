@@ -36,7 +36,7 @@ export default class AccountController extends BaseController {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAccount' }
     Logger.info('Get Account document by ID or username', labels)
 
-    const idOrUsername = c.req.param('id')
+    const { id: idOrUsername } = c.req.param()
     const account = await this.accountService.getOneAccount(c, { id: idOrUsername })
 
     if (account == null) {
@@ -47,7 +47,7 @@ export default class AccountController extends BaseController {
       })
     }
 
-    Logger.info(`Found account "${account.username}" (${account.id})`, labels)
+    Logger.info(`Found Account "${account.username}" (${account.id})`, labels)
     Logger.debug(account)
 
     return {
@@ -63,7 +63,7 @@ export default class AccountController extends BaseController {
     const body = c.req.valid('json')
     const account = await this.accountService.updateOneAccount(c, body)
 
-    Logger.info(`Updated account "${account.username}" (${account.id})`, labels)
+    Logger.info(`Updated Account "${account.username}" (${account.id})`, labels)
     Logger.debug(account)
 
     return {
@@ -79,6 +79,6 @@ export default class AccountController extends BaseController {
     const user = c.get('user')
     await this.accountService.deleteOneAccount(c)
 
-    Logger.info(`Deleted account "${user.name}" (${user.id})`, labels)
+    Logger.info(`Deleted Account "${user.name}" (${user.id})`, labels)
   }
 }

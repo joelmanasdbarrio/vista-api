@@ -12,7 +12,7 @@ export default function validate (target: keyof ValidationTargets, schema: ZodSc
       const errors: CustomError[] = []
       result.error.issues.forEach(issue => {
         errors.push({
-          code: (issue.code + '_' + issue.path).toUpperCase(),
+          code: (issue.code + '_' + issue.path.join('.')).toUpperCase(),
           message: issue.message
         })
       })

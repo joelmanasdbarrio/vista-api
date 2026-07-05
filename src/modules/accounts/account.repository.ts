@@ -1,5 +1,7 @@
-import { and, count, eq, like, or, SQL } from 'drizzle-orm'
+import { and, count, eq, like, or, sql, SQL } from 'drizzle-orm'
 import { Context } from 'hono'
+import { AccountDB } from 'src/types/database.types'
+import AppError from 'src/utils/error_handling/AppError'
 import { Account } from '../../db/schema'
 import { AccountDTO, AccountTypeEnum } from '../../types/vista-spec.types'
 import Logger, { LogLabels } from '../../utils/logger'
@@ -28,8 +30,8 @@ export default class AccountRepository extends BaseRepository {
     if (queryStr !== undefined && queryStr.length > 0) {
       filters.push(
         or(
-          like(Account.name, `%${queryStr}%`),
-          like(Account.username, `%${queryStr}%`)
+          like(sql`LOWER(${Account.name})`, `%${queryStr}%`),
+          like(sql`LOWER(${Account.username})`, `%${queryStr}%`)
         )
       )
     }
@@ -39,14 +41,14 @@ export default class AccountRepository extends BaseRepository {
       .from(Account)
       .where(and(...filters))
 
-    const accountsDB: Array<typeof Account.$inferSelect> = await this.drizzle
+    const accountsDB: AccountDB[] = await this.drizzle
       .select()
       .from(Account)
       .where(and(...filters))
       .limit(limit)
       .offset((page - 1) * limit)
 
-    const accountDTOs = this.accountMapper.toDTOs(accountsDB)
+    const accountDTOs = await this.accountMapper.toDTOs(accountsDB)
 
     return {
       accounts: accountDTOs,
@@ -58,28 +60,28 @@ export default class AccountRepository extends BaseRepository {
    * @deprecated
    */
   async getAll (query: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   async getOneById (id: string): Promise<AccountDTO | undefined> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneById' }
-    Logger.info('Get Account document', labels)
+    Logger.info(`Get Account document by ID "${id}"`, labels)
 
-    const [accountDB]: Array<typeof Account.$inferSelect> = await this.drizzle
+    const [accountDB]: AccountDB[] = await this.drizzle
       .select()
       .from(Account)
       .where(
         eq(Account.id, id)
       )
 
-    return this.accountMapper.toDTO(accountDB)
+    return await this.accountMapper.toDTO(accountDB)
   }
 
   async getOneByUsername (username: string): Promise<AccountDTO | undefined> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneByUsername' }
-    Logger.info('Get Account document', labels)
+    Logger.info(`Get Account document by username "${username}"`, labels)
 
-    const [accountDB]: Array<typeof Account.$inferSelect> = await this.drizzle
+    const [accountDB]: AccountDB[] = await this.drizzle
       .select()
       .from(Account)
       .where(
@@ -87,49 +89,52 @@ export default class AccountRepository extends BaseRepository {
       )
 
     const accountMapper = new AccountMapper()
-    return accountMapper.toDTO(accountDB)
+    return await accountMapper.toDTO(accountDB)
+  }
+
+  async getOneByEmail (email: string): Promise<AccountDTO | undefined> {
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneByEmail' }
+    Logger.info(`Get Account document by email "${email}"`, labels)
+
+    const [accountDB]: AccountDB[] = await this.drizzle
+      .select()
+      .from(Account)
+      .where(
+        eq(Account.email, email)
+      )
+
+    const accountMapper = new AccountMapper()
+    return accountDB && await accountMapper.toDTO(accountDB)
   }
 
   /**
    * @deprecated
    */
   async createOne (data: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   async updateOneById (id: string, data: AccountDTO): Promise<AccountDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneById' }
-    Logger.info('Update Account document', labels)
+    Logger.info(`Update Account document by ID "${id}"`, labels)
 
-    const updates: typeof Account.$inferInsert = this.accountMapper.toDB(data)
+    const updates = this.accountMapper.toDB(data)
 
     Logger.info('Updates to be applied')
     Logger.debug(updates)
 
-    const [accountDB]: Array<typeof Account.$inferSelect> = await this.drizzle
+    const [accountDB]: AccountDB[] = await this.drizzle
       .update(Account)
       .set(updates)
       .where(eq(Account.id, id))
       .returning()
 
-    // const [accountDB]: typeof account.$inferSelect[] = await this.drizzle.transaction(async (tx) => {
-    //   await tx.execute(
-    //     sql`SELECT set_config('request.jwt.claim.sub', ${user.id}, TRUE)`
-    //   )
-    //   await tx.execute(sql`SET ROLE authenticated`)
-    //   return tx
-    //     .update(account)
-    //     .set(updates)
-    //     .where(eq(account.id, id))
-    //     .returning()
-    // })
-
-    return this.accountMapper.toDTO(accountDB)
+    return await this.accountMapper.toDTO(accountDB)
   }
 
   async deleteOneById (id: string): Promise<void> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteOneById' }
-    Logger.info('Delete Account document', labels)
+    Logger.info(`Delete Account document by ID "${id}"`, labels)
 
     await this.drizzle
       .delete(Account)

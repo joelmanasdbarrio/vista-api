@@ -23,8 +23,6 @@ export default class ActivityCategoryService extends BaseService {
     Logger.info('Get Activity Category document', labels)
 
     const activityCategoryRepository = new ActivityCategoryRepository(c)
-    const activityCategory = await activityCategoryRepository.getOneById(id)
-
-    return activityCategory
+    return await activityCategoryRepository.getOneById(id)
   }
 }

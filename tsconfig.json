@@ -13,7 +13,9 @@
     "baseUrl": "./",
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "drizzle.config.ts"
   ],
   "exclude": [
     "node_modules",

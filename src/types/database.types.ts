@@ -1,0 +1,33 @@
+import type { InferEnum, InferInsertModel, InferSelectModel } from 'drizzle-orm'
+import * as schema from '../db/schema'
+
+export type AccountDB = InferSelectModel<typeof schema.Account>
+export type NewAccountDB = InferInsertModel<typeof schema.Account>
+export type FollowDB = InferSelectModel<typeof schema.Follow>
+export type NewFollowDB = InferInsertModel<typeof schema.Follow>
+export type FollowRequestDB = InferSelectModel<typeof schema.FollowRequest>
+export type NewFollowRequestDB = InferInsertModel<typeof schema.FollowRequest>
+export type AddressDB = InferSelectModel<typeof schema.Address>
+export type NewAddressDB = InferInsertModel<typeof schema.Address>
+export type ActivityCategoryDB = InferSelectModel<typeof schema.ActivityCategory>
+export type NewActivityCategoryDB = InferInsertModel<typeof schema.ActivityCategory>
+export type EstablishmentDB = InferSelectModel<typeof schema.Establishment>
+export type NewEstablishmentDB = InferInsertModel<typeof schema.Establishment>
+export type ActivityDB = InferSelectModel<typeof schema.Activity>
+export type NewActivityDB = InferInsertModel<typeof schema.Activity>
+export type ActivityOnsiteDB = InferSelectModel<typeof schema.ActivityOnsite>
+export type NewActivityOnsiteDB = InferInsertModel<typeof schema.ActivityOnsite>
+export type ActivityOnlineDB = InferSelectModel<typeof schema.ActivityOnline>
+export type NewActivityOnlineDB = InferInsertModel<typeof schema.ActivityOnline>
+export type ActivityParticipantDB = InferSelectModel<typeof schema.ActivityParticipant>
+export type NewActivityParticipantDB = InferInsertModel<typeof schema.ActivityParticipant>
+export type EstablishmentRequestDB = InferSelectModel<typeof schema.EstablishmentRequest>
+export type NewEstablishmentRequestDB = InferInsertModel<typeof schema.EstablishmentRequest>
+export type NotificationDB = InferSelectModel<typeof schema.Notification>
+export type NewNotificationDB = InferInsertModel<typeof schema.Notification>
+export type GenderEnumDB = InferEnum<typeof schema.GenderEnum>
+export type AccountTypeEnumDB = InferEnum<typeof schema.AccountTypeEnum>
+export type FollowRequestStatusEnumDB = InferEnum<typeof schema.FollowRequestStatusEnum>
+export type EstablishmentRequestStatusEnumDB = InferEnum<typeof schema.EstablishmentRequestStatusEnum>
+export type NotificationTypeEnumDB = InferEnum<typeof schema.NotificationTypeEnum>
+export type ActivityLanguageEnumDB = InferEnum<typeof schema.ActivityLanguageEnum>

@@ -1,9 +1,9 @@
-import { sql } from 'drizzle-orm'
-import { Address } from '../../../db/schema'
+import BaseMapper from 'src/modules/base.mapper'
+import { AddressDB, NewAddressDB } from 'src/types/database.types'
 import { AddressDTO } from '../../../types/vista-spec.types'
 
-export default class AddressMapper {
-  toDTO (input: typeof Address.$inferInsert): AddressDTO {
+export default class AddressMapper extends BaseMapper<AddressDB, AddressDTO> {
+  async toDTO (input: AddressDB): Promise<AddressDTO> {
     return {
       id: input.id,
       street: input.street,
@@ -20,13 +20,12 @@ export default class AddressMapper {
     }
   }
 
-  toDTOs (input: Array<typeof Address.$inferInsert>): AddressDTO[] {
-    return input.map(this.toDTO)
+  async toDTOs (input: AddressDB[]): Promise<AddressDTO[]> {
+    return await Promise.all(input.map(this.toDTO))
   }
 
-  toDB (data: AddressDTO): typeof Address.$inferInsert {
-    const output: Record<string, any> = {
-      id: data.id,
+  toDB (data: AddressDTO): NewAddressDB {
+    return {
       street: data.street,
       number: data.number,
       postal_code: data.postalCode,
@@ -36,9 +35,7 @@ export default class AddressMapper {
         x: data.coordinates.longitude,
         y: data.coordinates.latitude
       },
-      updated_at: sql`NOW()`
+      updated_at: new Date()
     }
-
-    return output as typeof Address.$inferInsert
   }
 }

@@ -1,6 +1,8 @@
+import { Context } from 'hono'
+import { NODE_ENV } from 'src/types/hono.types.js'
+import config from 'src/utils/config.js'
 import logger from '../../logger.js'
 import AppError from '../AppError.js'
-import { Context } from 'hono'
 
 /**
  * Logs and returns the complete error message in development mode for debugging
@@ -41,7 +43,7 @@ export default function globalErrorHandler (err: any, c: Context) {
   if (!(err instanceof AppError)) {
     err = new AppError(500, err.message || 'Internal Server Error', { code: err.code || 'INTERNAL_SERVER_ERROR', message: err.message })
   }
-  if (c.env.NODE_ENV === 'development') {
+  if (config.get(c, 'NODE_ENV') === NODE_ENV.DEVELOPMENT) {
     return devError(err, c)
   } else {
     return prodError(err, c)

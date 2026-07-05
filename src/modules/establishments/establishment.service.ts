@@ -1,4 +1,5 @@
 import { Context } from 'hono'
+import getId from 'src/utils/getId'
 import { AccountEnterpriseDTO, AccountTypeEnum, AddressDTO, EstablishmentDTO, EstablishmentsPaginatedDTO } from '../../types/vista-spec.types'
 import AppError from '../../utils/error_handling/AppError'
 import Logger, { LogLabels } from '../../utils/logger'
@@ -6,7 +7,7 @@ import AccountService from '../accounts/account.service'
 import BaseService from '../base.service'
 import AddressService from './addresses/address.service'
 import EstablishmentRepository from './establishment.repository'
-import { DeleteEstablishmentParam, GetEstablishmentParam, GetEstablishmentsQuery, PatchEstablishmentBody, PostEstablishmentBody } from './lib/establishments.validations'
+import { DeleteEstablishmentParam, EstablishmentSchema, GetEstablishmentParam, GetEstablishmentsQuery, PatchEstablishmentBody, PostEstablishmentBody } from './lib/establishments.validations'
 
 export default class EstablishmentService extends BaseService {
   protected resource = 'Establishment'
@@ -42,21 +43,23 @@ export default class EstablishmentService extends BaseService {
     Logger.info('Create a new Establishment document', labels)
 
     const addressService = new AddressService()
-    const address = await addressService.createAddress(c, body.address)
+    const addressDTO = await addressService.createAddress(c, body.address)
 
     const user = c.get('user')
     if (user.type !== AccountTypeEnum.ENTERPRISE) {
-      throw new AppError(403, 'Forbidden account type', {
+      throw new AppError(403, 'Forbidden Account type', {
         code: 'FORBIDDEN_ACCOUNT_TYPE',
-        message: 'Forbidden account type',
-        details: 'The owner of an establishment must be an enterprise account.'
+        message: 'Forbidden Account type',
+        details: 'The owner of an Establishment must be an Enterprise Account.'
       })
     }
 
+    const parsedBody = EstablishmentSchema.parse(body)
+
     const establishmentToCreate: EstablishmentDTO = {
-      name: body.name,
+      ...parsedBody,
       owner: user,
-      address
+      address: addressDTO
     }
 
     const establishmentRepository = new EstablishmentRepository(c)
@@ -67,30 +70,30 @@ export default class EstablishmentService extends BaseService {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneEstablishment' }
     Logger.info('Update Establishment document', labels)
 
-    if (!id) {
-      throw new AppError(400, 'Bad Request', {
-        code: 'ESTABLISHMENT_MISSING_ID',
-        message: 'Establishment ID is required',
-        details: 'The establishment ID must be provided to update an establishment.'
-      })
-    }
-
     if ((body.id !== null) && (JSON.stringify(body.id) !== JSON.stringify(id))) {
       throw new AppError(400, 'Bad Request', {
         code: 'ESTABLISHMENT_ID_MISMATCH',
         message: 'Establishment ID mismatch',
-        details: 'The provided ID does not match the establishment ID in the body.'
+        details: 'The provided ID does not match the Establishment ID in the body.'
       })
     }
 
-    const establishment = await this.getOneEstablishment(c, { id })
-    if (establishment == null) throw new AppError(404, 'Establishment not found', { code: 'ESTABLISHMENT_NOT_FOUND', message: 'Establishment not found', details: `No establishment found with ID "${id}"` })
+    const establishmentDTO = await this.getOneEstablishment(c, { id })
+    if (establishmentDTO == null) {
+      throw new AppError(404, `Establishment with ID "${id}" not found`, {
+        code: 'ESTABLISHMENT_NOT_FOUND',
+        message: `Establishment with ID "${id}" not found`,
+        details: 'Please, check if the desired ID is correctly typed.'
+      })
+    }
 
-    if (JSON.stringify(c.get('user').id) !== JSON.stringify(establishment.owner.id)) {
+    const ownerId = getId(establishmentDTO.owner)
+
+    if (JSON.stringify(c.get('user').id) !== JSON.stringify(ownerId)) {
       throw new AppError(403, 'Forbidden', {
         code: 'FORBIDDEN',
         message: 'Forbidden',
-        details: 'You can only update establishments you own.'
+        details: 'You can only update Establishments you own.'
       })
     }
 
@@ -99,18 +102,19 @@ export default class EstablishmentService extends BaseService {
       const addressService = new AddressService()
       updatedAddress = await addressService.updateAddress(c, body.address.id, body.address)
     } else {
-      updatedAddress = establishment.address
+      updatedAddress = establishmentDTO.address as AddressDTO
     }
 
     let updatedOwner: AccountEnterpriseDTO | undefined
-    if (body.owner?.id != null) {
+    const newOwnerId = getId(establishmentDTO.owner)
+    if (newOwnerId) {
       const accountService = new AccountService()
-      updatedOwner = await accountService.getOneAccount(c, { id: body.owner.id }) as AccountEnterpriseDTO | undefined
+      updatedOwner = await accountService.getOneAccount(c, { id: newOwnerId }) as AccountEnterpriseDTO | undefined
 
       if (updatedOwner == null) {
-        throw new AppError(404, `Account with ID "${body.owner.id}" not found`, {
+        throw new AppError(404, `Account with ID "${newOwnerId}" not found`, {
           code: 'ACCOUNT_NOT_FOUND',
-          message: `Account with ID "${body.owner.id}" not found`,
+          message: `Account with ID "${newOwnerId}" not found`,
           details: 'Please, check if the desired ID is correctly typed.'
         })
       } else if (updatedOwner.type !== AccountTypeEnum.ENTERPRISE) {
@@ -121,11 +125,11 @@ export default class EstablishmentService extends BaseService {
         })
       }
     } else {
-      updatedOwner = establishment.owner
+      updatedOwner = establishmentDTO.owner as AccountEnterpriseDTO
     }
 
     const establishmentToUpdate: EstablishmentDTO = {
-      name: body.name ?? establishment.name,
+      name: body.name ?? establishmentDTO.name,
       owner: updatedOwner,
       address: updatedAddress,
       updatedAt: new Date().toISOString()
@@ -139,16 +143,8 @@ export default class EstablishmentService extends BaseService {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteOneEstablishment' }
     Logger.info(`Delete Establishment document by ID "${id}"`, labels)
 
-    if (!id) {
-      throw new AppError(400, 'Bad Request', {
-        code: 'ESTABLISHMENT_MISSING_ID',
-        message: 'Establishment ID is required',
-        details: 'The establishment ID must be provided to delete an establishment.'
-      })
-    }
-
     const establishment = await this.getOneEstablishment(c, { id })
-    if (!establishment) {
+    if (establishment == null) {
       throw new AppError(404, 'Not Found', {
         code: 'ESTABLISHMENT_NOT_FOUND',
         message: 'Establishment not found',
@@ -156,7 +152,7 @@ export default class EstablishmentService extends BaseService {
       })
     }
 
-    if (JSON.stringify(c.get('user').id) !== JSON.stringify(establishment.owner.id)) {
+    if (JSON.stringify(c.get('user').id) !== JSON.stringify((establishment.owner as AccountEnterpriseDTO).id)) {
       throw new AppError(403, 'Forbidden', {
         code: 'FORBIDDEN',
         message: 'Forbidden',

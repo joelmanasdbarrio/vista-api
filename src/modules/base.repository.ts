@@ -1,21 +1,21 @@
-import { Context } from 'hono'
-import { createClient } from '@supabase/supabase-js'
 import { drizzle } from 'drizzle-orm/postgres-js'
+import { Context } from 'hono'
+import config from 'src/utils/config'
 
 export default abstract class BaseRepository implements Repository {
   protected layer: string = 'Repository'
-  protected supabase
+  // protected supabase
   protected drizzle
   protected c: Context
 
   constructor (c: Context) {
     this.c = c
-    this.supabase = createClient(
-      c.env.DATABASE_URL,
-      c.env.SUPABASE_API_KEY
-    )
+    // this.supabase = createClient(
+    //   config.get(c, 'DATABASE_URL'),
+    //   config.get(c, 'SUPABASE_API_KEY')
+    // )
 
-    this.drizzle = drizzle(c.env.DATABASE_URL)
+    this.drizzle = drizzle(config.get(c, 'DATABASE_URL'))
   }
 
   abstract getAllPaginated (query: any): Promise<any>

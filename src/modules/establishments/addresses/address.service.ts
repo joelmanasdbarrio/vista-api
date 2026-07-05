@@ -45,20 +45,12 @@ export default class AddressService extends BaseService {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateAddress' }
     Logger.info('Update Address document', labels)
 
-    if (!id) {
-      throw new AppError(400, 'Bad Request', {
-        code: 'ADDRESS_MISSING_ID',
-        message: 'Address ID is required',
-        details: 'The address ID must be provided to update an address.'
-      })
-    }
-
     const address = await this.getOneAddress(c, { id })
-    if (!address) {
+    if (address == null) {
       throw new AppError(404, 'Not Found', {
         code: 'ADDRESS_NOT_FOUND',
-        message: 'Address not found',
-        details: `No address found with ID "${id}"`
+        message: `Address with ID "${id}" not found`,
+        details: 'Please, check if the desired ID is correctly typed'
       })
     }
 

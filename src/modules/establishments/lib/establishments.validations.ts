@@ -1,83 +1,99 @@
+import { AccountEnterpriseSchema } from 'src/modules/accounts/lib/account.validations'
 import z from 'zod'
-import { patchAddressSchema, postAddressSchema } from '../addresses/lib/address.validations'
+import { AddressSchema, PatchAddressSchema, PostAddressSchema } from '../addresses/lib/address.validations'
 
-export const getEstablishmentsSchema = z.object({
-  page: z.coerce.number().optional(),
-  limit: z.coerce.number().optional(),
+export const EstablishmentSchema = z.object({
+  id: z.uuid().optional(),
+  name: z.string(),
+  owner: z.union([
+    z.uuid(),
+    AccountEnterpriseSchema
+  ]),
+  address: AddressSchema,
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional()
+})
+
+export const GetEstablishmentsSchema = z.object({
+  page: z.number().int().min(1).default(1),
+  limit: z.number().int().min(1).max(100).default(10),
   name: z.string().optional(),
   address: z.string().optional(),
   owner: z.uuid().optional()
 })
 
-export const getEstablishmentSchema = z.object({
+export const GetEstablishmentSchema = z.object({
   id: z.uuid()
 })
 
-export const postEstablishmentSchema = z.object({
+export const PostEstablishmentSchema = z.object({
   name: z.string(),
-  address: postAddressSchema
+  owner: z.union([z.uuid(), z.object({
+    id: z.uuid()
+  })]),
+  address: PostAddressSchema
 })
 
-export const patchEstablishmentSchema = z.object({
+export const PatchEstablishmentSchema = z.object({
   id: z.uuid(),
   name: z.string().optional(),
-  address: patchAddressSchema.optional(),
-  owner: z.object({
+  address: PatchAddressSchema.optional(),
+  owner: z.union([z.uuid(), z.object({
     id: z.uuid()
-  }).optional()
+  })]).optional()
 })
 
-export const deleteEstablishmentSchema = z.object({
+export const DeleteEstablishmentSchema = z.object({
   id: z.uuid()
 })
 
 export interface GetEstablishmentsInput {
   in: {
-    query: z.infer<typeof getEstablishmentsSchema>
+    query: z.infer<typeof GetEstablishmentsSchema>
   }
   out: {
-    query: z.infer<typeof getEstablishmentsSchema>
+    query: z.infer<typeof GetEstablishmentsSchema>
   }
 }
 
 export interface GetEstablishmentInput {
   in: {
-    param: z.infer<typeof getEstablishmentSchema>
+    param: z.infer<typeof GetEstablishmentSchema>
   }
   out: {
-    param: z.infer<typeof getEstablishmentSchema>
+    param: z.infer<typeof GetEstablishmentSchema>
   }
 }
 
 export interface PostEstablishmentInput {
   in: {
-    json: z.infer<typeof postEstablishmentSchema>
+    json: z.infer<typeof PostEstablishmentSchema>
   }
   out: {
-    json: z.infer<typeof postEstablishmentSchema>
+    json: z.infer<typeof PostEstablishmentSchema>
   }
 }
 
 export interface PatchEstablishmentInput {
   in: {
-    json: z.infer<typeof patchEstablishmentSchema>
+    json: z.infer<typeof PatchEstablishmentSchema>
   }
   out: {
-    json: z.infer<typeof patchEstablishmentSchema>
+    json: z.infer<typeof PatchEstablishmentSchema>
   }
 }
 
 export interface DeleteEstablishmentInput {
   in: {
-    param: z.infer<typeof deleteEstablishmentSchema>
+    param: z.infer<typeof DeleteEstablishmentSchema>
   }
   out: {
-    param: z.infer<typeof deleteEstablishmentSchema>
+    param: z.infer<typeof DeleteEstablishmentSchema>
   }
 }
 
-export type GetEstablishmentsQuery = z.infer<typeof getEstablishmentsSchema>
-export type GetEstablishmentParam = z.infer<typeof getEstablishmentSchema>
-export type PostEstablishmentBody = z.infer<typeof postEstablishmentSchema>
-export type PatchEstablishmentBody = z.infer<typeof patchEstablishmentSchema>
-export type DeleteEstablishmentParam = z.infer<typeof deleteEstablishmentSchema>
+export type GetEstablishmentsQuery = z.infer<typeof GetEstablishmentsSchema>
+export type GetEstablishmentParam = z.infer<typeof GetEstablishmentSchema>
+export type PostEstablishmentBody = z.infer<typeof PostEstablishmentSchema>
+export type PatchEstablishmentBody = z.infer<typeof PatchEstablishmentSchema>
+export type DeleteEstablishmentParam = z.infer<typeof DeleteEstablishmentSchema>

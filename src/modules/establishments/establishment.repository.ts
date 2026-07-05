@@ -1,10 +1,13 @@
 import { and, count, eq, like, or, SQL, sql } from 'drizzle-orm'
 import { Context } from 'hono'
+import { EstablishmentDB } from 'src/types/database.types'
+import AppError from 'src/utils/error_handling/AppError'
 import { Address, Establishment } from '../../db/schema'
 import { EstablishmentDTO } from '../../types/vista-spec.types'
 import Logger, { LogLabels } from '../../utils/logger'
 import BaseRepository from '../base.repository'
 import EstablishmentMapper from './establishment.mapper'
+import { GetEstablishmentsQuery } from './lib/establishments.validations'
 
 export default class EstablishmentRepository extends BaseRepository {
   protected resource = 'Establishment'
@@ -15,11 +18,11 @@ export default class EstablishmentRepository extends BaseRepository {
     this.establishmentMapper = new EstablishmentMapper(c)
   }
 
-  async getAllPaginated ({ page = 1, limit = 10, name = '', address = '' }): Promise<{ establishments: EstablishmentDTO[], totalEstablishments: number }> {
+  async getAllPaginated ({ page = 1, limit = 10, name, address }: GetEstablishmentsQuery): Promise<{ establishments: EstablishmentDTO[], totalEstablishments: number }> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllPaginated' }
     Logger.info('Get Establishment documents paginated', labels)
 
-    const queryStr = (name || address)?.trim().toLowerCase()
+    const queryStr = (name ?? address)?.trim().toLowerCase()
     const filters: Array<SQL | undefined> = []
     if (queryStr !== undefined && queryStr.length > 0) {
       filters.push(
@@ -36,7 +39,7 @@ export default class EstablishmentRepository extends BaseRepository {
       .leftJoin(Address, sql`establishment.address_id = address.id`)
       .where(and(...filters))
 
-    const establishmentsDB: Array<typeof Establishment.$inferSelect> = await this.drizzle
+    const establishmentsDB: EstablishmentDB[] = await this.drizzle
       .select({
         id: Establishment.id,
         name: Establishment.name,
@@ -63,19 +66,18 @@ export default class EstablishmentRepository extends BaseRepository {
    * @deprecated
    */
   async getAll (query: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   async getOneById (id: string): Promise<EstablishmentDTO | undefined> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneById' }
-    Logger.info('Get Establishment document', labels)
+    Logger.info(`Get Establishment document by ID "${id}"`, labels)
 
-    const [establishmentDB]: Array<typeof Establishment.$inferSelect> = await this.drizzle
+    const [establishmentDB]: EstablishmentDB[] = await this.drizzle
       .select()
       .from(Establishment)
-      .where(
-        eq(Establishment.id, id)
-      )
+      .where(eq(Establishment.id, id))
+      .limit(1)
 
     return await this.establishmentMapper.toDTO(establishmentDB)
   }
@@ -84,9 +86,9 @@ export default class EstablishmentRepository extends BaseRepository {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createOne' }
     Logger.info('Create Establishment document', labels)
 
-    const establishmentData: typeof Establishment.$inferInsert = this.establishmentMapper.toDB(data)
+    const establishmentData = this.establishmentMapper.toDB(data)
 
-    const [establishmentDB]: Array<typeof Establishment.$inferSelect> = await this.drizzle
+    const [establishmentDB]: EstablishmentDB[] = await this.drizzle
       .insert(Establishment)
       .values(establishmentData)
       .returning()
@@ -96,11 +98,11 @@ export default class EstablishmentRepository extends BaseRepository {
 
   async updateOneById (id: string, data: EstablishmentDTO): Promise<EstablishmentDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOne' }
-    Logger.info('Update Establishment document', labels)
+    Logger.info(`Update Establishment document by ID "${id}"`, labels)
 
-    const updates: typeof Establishment.$inferInsert = this.establishmentMapper.toDB(data)
+    const updates = this.establishmentMapper.toDB(data)
 
-    const [establishmentDB]: Array<typeof Establishment.$inferSelect> = await this.drizzle
+    const [establishmentDB]: EstablishmentDB[] = await this.drizzle
       .update(Establishment)
       .set(updates)
       .where(eq(Establishment.id, id))
@@ -111,12 +113,11 @@ export default class EstablishmentRepository extends BaseRepository {
 
   async deleteOneById (id: string): Promise<void> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteOneById' }
-    Logger.info('Delete Establishment document', labels)
+    Logger.info(`Delete Establishment document by ID "${id}"`, labels)
 
     await this.drizzle
       .delete(Establishment)
-      .where(
-        eq(Establishment.id, id)
-      ).returning()
+      .where(eq(Establishment.id, id))
+      .returning()
   }
 }

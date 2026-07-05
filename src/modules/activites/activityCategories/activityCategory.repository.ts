@@ -1,5 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { Context } from 'hono'
+import { ActivityCategoryDB } from 'src/types/database.types'
+import AppError from 'src/utils/error_handling/AppError'
 import { ActivityCategory } from '../../../db/schema'
 import { ActivityCategoryDTO } from '../../../types/vista-spec.types'
 import Logger, { LogLabels } from '../../../utils/logger'
@@ -19,14 +21,14 @@ export default class ActivityCategoryRepository extends BaseRepository {
    * @deprecated
    */
   async getAllPaginated (query: any): Promise<{ activityCategories: ActivityCategoryDTO[] }> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method deprecated. Use getAll instead.', { code: 'METHOD_DEPRECATED', message: 'Method deprecated. Use getAll instead.' })
   }
 
   async getAll (): Promise<{ activityCategories: ActivityCategoryDTO[] }> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllPaginated' }
     Logger.info('Get all Activity Categories documents', labels)
 
-    const activityCategoriesDB: Array<typeof ActivityCategory.$inferSelect> = await this.drizzle
+    const activityCategoriesDB: ActivityCategoryDB[] = await this.drizzle
       .select()
       .from(ActivityCategory)
 
@@ -41,7 +43,7 @@ export default class ActivityCategoryRepository extends BaseRepository {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getOneById' }
     Logger.info('Get Activity Category document', labels)
 
-    const [activityCategoryDB]: Array<typeof ActivityCategory.$inferSelect> = await this.drizzle
+    const [activityCategoryDB]: ActivityCategoryDB[] = await this.drizzle
       .select()
       .from(ActivityCategory)
       .where(
@@ -55,20 +57,20 @@ export default class ActivityCategoryRepository extends BaseRepository {
    * @deprecated
    */
   async createOne (data: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   /**
    * @deprecated
    */
   async updateOneById (id: string, data: any): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 
   /**
    * @deprecated
    */
   async deleteOneById (id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new AppError(500, 'Method not implemented.', { code: 'METHOD_NOT_IMPLEMENTED', message: 'Method not implemented.' })
   }
 }

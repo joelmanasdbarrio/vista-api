@@ -1,10 +1,31 @@
 import z from 'zod'
 
-export const getAddressSchema = z.object({
+export const CoordinatesSchema = z.object({
+  coordinates: z.object({
+    latitude: z.number(),
+    longitude: z.number()
+  })
+})
+
+export const AddressSchema = z.object({
+  id: z.uuid().optional(),
+  country: z.string(),
+  postalCode: z.string(),
+  city: z.string(),
+  street: z.string(),
+  number: z.string(),
+  block: z.string().optional(),
+  floor: z.string().optional(),
+  stair: z.string().optional(),
+  door: z.string().optional(),
+  CoordinatesSchema
+})
+
+export const GetAddressSchema = z.object({
   id: z.uuid()
 })
 
-export const postAddressSchema = z.object({
+export const PostAddressSchema = z.object({
   country: z.string(),
   postalCode: z.string(),
   city: z.string(),
@@ -20,7 +41,7 @@ export const postAddressSchema = z.object({
   })
 })
 
-export const patchAddressSchema = z.object({
+export const PatchAddressSchema = z.object({
   id: z.uuid(),
   country: z.string().optional(),
   postalCode: z.string().optional(),
@@ -37,6 +58,7 @@ export const patchAddressSchema = z.object({
   }).optional()
 })
 
-export type GetAddressParam = z.infer<typeof getAddressSchema>
-export type PostAddressBody = z.infer<typeof postAddressSchema>
-export type PatchAddressBody = z.infer<typeof patchAddressSchema>
+export type GetAddressParam = z.infer<typeof GetAddressSchema>
+export type PostAddressBody = z.infer<typeof PostAddressSchema>
+export type PatchAddressBody = z.infer<typeof PatchAddressSchema>
+export type CoordinatesDTO = z.infer<typeof CoordinatesSchema>

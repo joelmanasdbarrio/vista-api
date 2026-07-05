@@ -19,7 +19,7 @@ export default class EstablishmentController extends BaseController {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getEstablishments' }
     Logger.info('Get all Establishment documents paginated', labels)
 
-    const { data, _meta } = await this.establishmentService.getAllEstablishmentsPaginated(c, c.req.query())
+    const { data, _meta } = await this.establishmentService.getAllEstablishmentsPaginated(c, c.req.valid('query'))
 
     Logger.info(`Found ${data.length} establishment(s)`, labels)
     Logger.debug(data)
@@ -35,7 +35,7 @@ export default class EstablishmentController extends BaseController {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getEstablishment' }
     Logger.info('Get Establishment document by ID', labels)
 
-    const id = c.req.param('id')
+    const { id } = c.req.param()
     const establishment = await this.establishmentService.getOneEstablishment(c, { id })
 
     if (establishment == null) {
@@ -46,7 +46,7 @@ export default class EstablishmentController extends BaseController {
       })
     }
 
-    Logger.info(`Found establishment "${establishment.name}" (${String(establishment.id)})`, labels)
+    Logger.info(`Found Establishment "${establishment.name}" (${String(establishment.id)})`, labels)
     Logger.debug(establishment)
 
     return {
@@ -59,10 +59,10 @@ export default class EstablishmentController extends BaseController {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createEstablishment' }
     Logger.info('Create a new Establishment document', labels)
 
-    const body = await c.req.json()
+    const body = c.req.valid('json')
     const establishment = await this.establishmentService.createEstablishment(c, body)
 
-    Logger.info(`Created establishment (${String(establishment.id)})`, labels)
+    Logger.info(`Created Establishment (${String(establishment.id)})`, labels)
     Logger.debug(establishment)
 
     return {
@@ -75,11 +75,11 @@ export default class EstablishmentController extends BaseController {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateEstablishment' }
     Logger.info('Update an Establishment document', labels)
 
-    const id = c.req.param('id')
-    const body = await c.req.json()
+    const { id } = c.req.param()
+    const body = c.req.valid('json')
     const establishment = await this.establishmentService.updateOneEstablishment(c, id, body)
 
-    Logger.info(`Updated establishment (${String(establishment.id)})`, labels)
+    Logger.info(`Updated Establishment (${String(establishment.id)})`, labels)
     Logger.debug(establishment)
 
     return {
@@ -95,6 +95,6 @@ export default class EstablishmentController extends BaseController {
     const id = c.req.param('id')
     await this.establishmentService.deleteOneEstablishment(c, { id })
 
-    Logger.info(`Deleted establishment (${id})`, labels)
+    Logger.info(`Deleted Establishment (${id})`, labels)
   }
 }
