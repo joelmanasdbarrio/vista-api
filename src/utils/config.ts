@@ -3,13 +3,13 @@ import { Env } from 'src/types/hono.types'
 import AppError from './error_handling/AppError'
 
 const config = {
-  get (c: Context<{ Bindings: Env }>, key: keyof Env): Env[keyof Env] {
-    const value = process.env[key]
-    if (!value) {
-      throw new AppError(500, `Missing environment variable: ${key}`, {
+  get<K extends keyof Env> (c: Context<{ Bindings: Env }>, key: K): Env[K] {
+    const value = c.env[key]
+    if (value == null || value === '') {
+      throw new AppError(500, `Missing environment variable: ${String(key)}`, {
         code: 'MISSING_ENV_VARIABLE',
-        message: `Missing environment variable: ${key}`,
-        details: `Please set the ${key} environment variable`
+        message: `Missing environment variable: ${String(key)}`,
+        details: `Please set the ${String(key)} environment variable`
       })
     }
     return value
