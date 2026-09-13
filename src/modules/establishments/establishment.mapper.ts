@@ -99,7 +99,7 @@ export default class EstablishmentMapper extends BaseMapper<EstablishmentDB, Est
     })
   }
 
-  toDB (data: EstablishmentDTO): NewEstablishmentDB {
+  toDB (data: EstablishmentDTO, addressId?: string): NewEstablishmentDB {
     const ownerId = getId(data.owner)
     if (!ownerId) {
       throw new AppError(400, 'Establishment owner ID is required', {
@@ -109,8 +109,8 @@ export default class EstablishmentMapper extends BaseMapper<EstablishmentDB, Est
       })
     }
 
-    const addressId = getId(data.address)
-    if (!addressId) {
+    const resolvedAddressId = addressId ?? getId(data.address)
+    if (!resolvedAddressId) {
       throw new AppError(400, 'Establishment address ID is required', {
         code: 'ESTABLISHMENT_ADDRESS_ID_REQUIRED',
         message: 'Establishment address ID is required',
@@ -121,7 +121,7 @@ export default class EstablishmentMapper extends BaseMapper<EstablishmentDB, Est
     return {
       name: data.name,
       owner_id: ownerId,
-      address_id: addressId,
+      address_id: resolvedAddressId,
       updated_at: new Date()
     }
   }

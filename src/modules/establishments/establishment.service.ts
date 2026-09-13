@@ -47,9 +47,6 @@ export default class EstablishmentService extends BaseService {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createNewEstablishment' }
     Logger.info('Create a new Establishment document', labels)
 
-    const addressService = new AddressService()
-    const addressDTO = await addressService.createAddress(c, body.address)
-
     const user = c.get('user')
     if (user.type !== AccountTypeEnum.ENTERPRISE) {
       throw new AppError(403, 'Forbidden Account type', {
@@ -64,7 +61,7 @@ export default class EstablishmentService extends BaseService {
     const establishmentToCreate: EstablishmentDTO = {
       ...parsedBody,
       owner: user,
-      address: addressDTO
+      address: body.address
     }
 
     const establishmentRepository = new EstablishmentRepository(c)

@@ -3,19 +3,22 @@ import { Context } from 'hono'
 import { EstablishmentDB } from 'src/types/database.types'
 import AppError from 'src/utils/error_handling/AppError'
 import { Address, Establishment } from '../../db/schema'
-import { EstablishmentDTO } from '../../types/vista-spec.types'
+import { AddressDTO, EstablishmentDTO } from '../../types/vista-spec.types'
 import Logger, { LogLabels } from '../../utils/logger'
 import BaseRepository from '../base.repository'
+import AddressMapper from './addresses/address.mapper'
 import EstablishmentMapper from './establishment.mapper'
 import { GetEstablishmentsQuery } from './lib/establishments.validations'
 
 export default class EstablishmentRepository extends BaseRepository {
   protected resource = 'Establishment'
   protected establishmentMapper: EstablishmentMapper
+  protected addressMapper: AddressMapper
 
   constructor (c: Context) {
     super(c)
     this.establishmentMapper = new EstablishmentMapper(c)
+    this.addressMapper = new AddressMapper()
   }
 
   async getAllPaginated ({ page = 1, limit = 10, name, address }: GetEstablishmentsQuery): Promise<{ establishments: EstablishmentDTO[], totalEstablishments: number }> {
@@ -97,12 +100,21 @@ export default class EstablishmentRepository extends BaseRepository {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createOne' }
     Logger.info('Create Establishment document', labels)
 
-    const establishmentData = this.establishmentMapper.toDB(data)
+    const addressData = this.addressMapper.toDB(data.address as AddressDTO)
+    const { establishmentDB } = await this.drizzle.transaction(async (tx) => {
+      const [addressDB] = await tx
+        .insert(Address)
+        .values(addressData)
+        .returning()
 
-    const [establishmentDB]: EstablishmentDB[] = await this.drizzle
-      .insert(Establishment)
-      .values(establishmentData)
-      .returning()
+      const establishmentData = this.establishmentMapper.toDB(data, addressDB.id)
+      const [establishmentDB] = await tx
+        .insert(Establishment)
+        .values(establishmentData)
+        .returning()
+
+      return { establishmentDB }
+    })
 
     return await this.establishmentMapper.toDTO(establishmentDB)
   }

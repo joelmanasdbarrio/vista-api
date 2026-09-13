@@ -327,19 +327,18 @@ export default class ActivityRepository extends BaseRepository {
 
     const { activity, activityOnsite } = this.activityOnsiteMapper.toDB(data)
 
-    const [createdActivityArr, createdActivityOnsiteArr] = await Promise.all([
-      this.drizzle
+    const { createdActivity, createdActivityOnsite } = await this.drizzle.transaction(async (tx) => {
+      const [createdActivity] = await tx
         .insert(Activity)
         .values(activity)
-        .returning(),
-      this.drizzle
-        .insert(ActivityOnsite)
-        .values(activityOnsite)
         .returning()
-    ])
+      const [createdActivityOnsite] = await tx
+        .insert(ActivityOnsite)
+        .values({ ...activityOnsite, activity_id: createdActivity.id })
+        .returning()
 
-    const createdActivity = Array.isArray(createdActivityArr) ? createdActivityArr[0] : createdActivityArr
-    const createdActivityOnsite = Array.isArray(createdActivityOnsiteArr) ? createdActivityOnsiteArr[0] : createdActivityOnsiteArr
+      return { createdActivity, createdActivityOnsite }
+    })
 
     const mergedData = {
       ...createdActivity,
@@ -355,19 +354,18 @@ export default class ActivityRepository extends BaseRepository {
 
     const { activity, activityOnline } = this.activityOnlineMapper.toDB(data)
 
-    const [createdActivityArr, createdActivityOnlineArr] = await Promise.all([
-      this.drizzle
+    const { createdActivity, createdActivityOnline } = await this.drizzle.transaction(async (tx) => {
+      const [createdActivity] = await tx
         .insert(Activity)
         .values(activity)
-        .returning(),
-      this.drizzle
-        .insert(ActivityOnline)
-        .values(activityOnline)
         .returning()
-    ])
+      const [createdActivityOnline] = await tx
+        .insert(ActivityOnline)
+        .values({ ...activityOnline, activity_id: createdActivity.id })
+        .returning()
 
-    const createdActivity = Array.isArray(createdActivityArr) ? createdActivityArr[0] : createdActivityArr
-    const createdActivityOnline = Array.isArray(createdActivityOnlineArr) ? createdActivityOnlineArr[0] : createdActivityOnlineArr
+      return { createdActivity, createdActivityOnline }
+    })
 
     const mergedData = {
       ...createdActivity,
