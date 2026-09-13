@@ -14,7 +14,7 @@ export default class EstablishmentRouter {
     this.establishmentController = new EstablishmentController()
 
     this.router
-      .all('/', protectedRoute)
+      .use('*', protectedRoute)
       .get('/',
         validate('query', GetEstablishmentsSchema),
         async (c: Context<any, any, GetEstablishmentsInput>) => {

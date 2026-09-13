@@ -13,7 +13,7 @@ export default class AccountRouter {
     this.accountController = new AccountController()
 
     this.router
-      .all('/', protectedRoute)
+      .use('*', protectedRoute)
       .get('/',
         validate('query', GetAccountsSchema),
         async (c: Context<any, any, GetAccountsInput>) => {

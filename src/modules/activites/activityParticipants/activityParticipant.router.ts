@@ -14,7 +14,7 @@ export default class ActivityParticipantRouter {
     this.activityParticipantController = new ActivityParticipantController()
 
     this.router
-      .all('/',
+      .use('*',
         protectedRoute,
         validate('param', GetActivitySchema)
       )

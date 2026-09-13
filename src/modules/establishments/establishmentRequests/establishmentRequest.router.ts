@@ -13,7 +13,7 @@ export default class EstablishmentRequestRouter {
     this.establishmentRequestController = new EstablishmentRequestController()
 
     this.router
-      .all('/', protectedRoute)
+      .use('*', protectedRoute)
       .get('/',
         validate('query', GetEstablishmentRequestsSchema),
         async (c: Context<any, any, GetEstablishmentRequestsInput>) => {

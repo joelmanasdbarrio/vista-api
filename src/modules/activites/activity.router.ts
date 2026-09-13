@@ -3,6 +3,7 @@ import { protectedRoute } from 'src/modules/auth/auth.middleware'
 import validate from 'src/utils/error_handling/middlewares/validator.middleware'
 import ActivityController from './activity.controller'
 import ActivityCategoryRouter from './activityCategories/activityCategory.router'
+import ActivityParticipantRouter from './activityParticipants/activityParticipant.router'
 import { DeleteActivityInput, DeleteActivitySchema, GetActivitiesInput, GetActivitiesSchema, GetActivityInput, GetActivitySchema, PatchActivityInput, PatchActivitySchema, PostActivityInput, PostActivitySchema } from './lib/activity.validations'
 
 export default class ActivityRouter {
@@ -14,7 +15,7 @@ export default class ActivityRouter {
     this.activityController = new ActivityController()
 
     this.router
-      .all('/', protectedRoute)
+      .use('*', protectedRoute)
       .get('/',
         validate('query', GetActivitiesSchema),
         async (c: Context<any, any, GetActivitiesInput>) => {
@@ -47,6 +48,6 @@ export default class ActivityRouter {
         })
 
       .route('/categories', new ActivityCategoryRouter().router)
-      .route('/:id/participants', new ActivityCategoryRouter().router)
+      .route('/:id/participants', new ActivityParticipantRouter().router)
   }
 }

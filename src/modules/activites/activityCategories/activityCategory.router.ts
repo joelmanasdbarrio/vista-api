@@ -11,7 +11,7 @@ export default class ActivityCategoryRouter {
     this.activityCategoryController = new ActivityCategoryController()
 
     this.router
-      .all('/', protectedRoute)
+      .use('*', protectedRoute)
       .get('/',
         async (c) => {
           const res = await this.activityCategoryController.getActivityCategories(c)
