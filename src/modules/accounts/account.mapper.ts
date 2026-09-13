@@ -50,7 +50,7 @@ export default class AccountMapper extends BaseMapper<AccountDB, AccountDTO> {
   }
 
   async toDTOs (input: AccountDB[]): Promise<AccountDTO[]> {
-    return await Promise.all(input.map(this.toDTO))
+    return await Promise.all(input.map(async account => await this.toDTO(account)))
   }
 
   toDB (data: AccountDTO): NewAccountDB {

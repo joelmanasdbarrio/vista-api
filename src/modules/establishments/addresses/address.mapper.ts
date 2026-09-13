@@ -21,7 +21,7 @@ export default class AddressMapper extends BaseMapper<AddressDB, AddressDTO> {
   }
 
   async toDTOs (input: AddressDB[]): Promise<AddressDTO[]> {
-    return await Promise.all(input.map(this.toDTO))
+    return await Promise.all(input.map(async address => await this.toDTO(address)))
   }
 
   toDB (data: AddressDTO): NewAddressDB {
