@@ -41,12 +41,21 @@ export default class ActivityRepository extends BaseRepository {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllActivityOnsitePaginated' }
     Logger.info('Get Activity Onsite documents paginated', labels)
 
-    const filters = this.buildFilters(query)
+    const { whereFilters, havingFilters } = this.buildFilters(query)
 
     const [totalCount] = await this.drizzle
       .select({ count: count() })
-      .from(Activity)
-      .innerJoin(ActivityOnsite, eq(Activity.id, ActivityOnsite.activity_id))
+      .from(
+        this.drizzle
+          .select({ id: Activity.id })
+          .from(Activity)
+          .innerJoin(ActivityOnsite, eq(Activity.id, ActivityOnsite.activity_id))
+          .leftJoin(ActivityParticipant, eq(ActivityParticipant.activity_id, Activity.id))
+          .where(and(...whereFilters))
+          .groupBy(Activity.id, ActivityOnsite.activity_id)
+          .having(and(...havingFilters))
+          .as('filtered_onsite_activities')
+      )
 
     const activitiesDB = await this.drizzle
       .select({
@@ -78,8 +87,9 @@ export default class ActivityRepository extends BaseRepository {
       .from(Activity)
       .innerJoin(ActivityOnsite, eq(Activity.id, ActivityOnsite.activity_id))
       .leftJoin(ActivityParticipant, eq(ActivityParticipant.activity_id, Activity.id))
-      .where(and(...filters))
+      .where(and(...whereFilters))
       .groupBy(Activity.id, ActivityOnsite.activity_id)
+      .having(and(...havingFilters))
       .limit(query.limit)
       .offset((query.page - 1) * query.limit)
 
@@ -95,12 +105,21 @@ export default class ActivityRepository extends BaseRepository {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllActivityOnlinePaginated' }
     Logger.info('Get Activity Online documents paginated', labels)
 
-    const filters = this.buildFilters(query)
+    const { whereFilters, havingFilters } = this.buildFilters(query)
 
     const [totalCount] = await this.drizzle
       .select({ count: count() })
-      .from(Activity)
-      .innerJoin(ActivityOnline, eq(Activity.id, ActivityOnline.activity_id))
+      .from(
+        this.drizzle
+          .select({ id: Activity.id })
+          .from(Activity)
+          .innerJoin(ActivityOnline, eq(Activity.id, ActivityOnline.activity_id))
+          .leftJoin(ActivityParticipant, eq(ActivityParticipant.activity_id, Activity.id))
+          .where(and(...whereFilters))
+          .groupBy(Activity.id, ActivityOnline.activity_id)
+          .having(and(...havingFilters))
+          .as('filtered_online_activities')
+      )
 
     const activitiesDB = await this.drizzle
       .select({
@@ -131,8 +150,9 @@ export default class ActivityRepository extends BaseRepository {
       .from(Activity)
       .innerJoin(ActivityOnline, eq(Activity.id, ActivityOnline.activity_id))
       .leftJoin(ActivityParticipant, eq(ActivityParticipant.activity_id, Activity.id))
-      .where(and(...filters))
+      .where(and(...whereFilters))
       .groupBy(Activity.id, ActivityOnline.activity_id)
+      .having(and(...havingFilters))
       .limit(query.limit)
       .offset((query.page - 1) * query.limit)
 
@@ -144,15 +164,16 @@ export default class ActivityRepository extends BaseRepository {
     }
   }
 
-  private buildFilters (query: GetActivitiesQuery): Array<SQL | undefined> {
-    const filters: Array<SQL | undefined> = []
+  private buildFilters (query: GetActivitiesQuery): { whereFilters: SQL[], havingFilters: SQL[] } {
+    const whereFilters: SQL[] = []
+    const havingFilters: SQL[] = []
 
     if (query.accountId) {
-      filters.push(eq(Activity.owner_id, query.accountId))
+      whereFilters.push(eq(Activity.owner_id, query.accountId))
     }
 
     if (query.categoryId) {
-      filters.push(eq(Activity.category_id, query.categoryId))
+      whereFilters.push(eq(Activity.category_id, query.categoryId))
     }
 
     if (query.title !== null || query.description !== null) {
@@ -160,54 +181,55 @@ export default class ActivityRepository extends BaseRepository {
       const descriptionQuery = query.description?.trim().toLowerCase()
 
       if (titleQuery && descriptionQuery) {
-        filters.push(or(
+        const titleOrDescriptionFilter = or(
           eq(Activity.title, titleQuery),
           eq(Activity.description, descriptionQuery)
-        ))
+        )
+        if (titleOrDescriptionFilter != null) whereFilters.push(titleOrDescriptionFilter)
       } else if (titleQuery) {
-        filters.push(eq(Activity.title, titleQuery))
+        whereFilters.push(eq(Activity.title, titleQuery))
       } else if (descriptionQuery) {
-        filters.push(eq(Activity.description, descriptionQuery))
+        whereFilters.push(eq(Activity.description, descriptionQuery))
       }
     }
 
     if (query.language) {
-      filters.push(eq(Activity.language, query.language))
+      whereFilters.push(eq(Activity.language, query.language))
     }
 
     if (query.minPrice) {
-      filters.push(gte(Activity.price_min, query.minPrice))
+      whereFilters.push(gte(Activity.price_min, query.minPrice))
     }
 
     if (query.maxPrice) {
-      filters.push(lte(Activity.price_max, query.maxPrice))
+      whereFilters.push(lte(Activity.price_max, query.maxPrice))
     }
 
     if (query.timeStart != null) {
-      filters.push(gte(Activity.time_start, query.timeStart))
+      whereFilters.push(gte(Activity.time_start, query.timeStart))
     }
 
     if (query.timeEnd != null) {
-      filters.push(lte(Activity.time_end, query.timeEnd))
+      whereFilters.push(lte(Activity.time_end, query.timeEnd))
     }
 
     if (query.minParticipants) {
-      filters.push(gte(Activity.participants_min, query.minParticipants))
+      whereFilters.push(gte(Activity.participants_min, query.minParticipants))
     }
 
     if (query.maxParticipants) {
-      filters.push(lte(Activity.participants_max, query.maxParticipants))
+      whereFilters.push(lte(Activity.participants_max, query.maxParticipants))
     }
 
     if (query.minEntries) {
-      filters.push(gte(count(ActivityParticipant.id), query.minEntries))
+      havingFilters.push(gte(count(ActivityParticipant.id), query.minEntries))
     }
 
     if (query.maxEntries) {
-      filters.push(lte(count(ActivityParticipant.id), query.maxEntries))
+      havingFilters.push(lte(count(ActivityParticipant.id), query.maxEntries))
     }
 
-    return filters
+    return { whereFilters, havingFilters }
   }
 
   /**
