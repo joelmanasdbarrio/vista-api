@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 import { Context } from 'hono'
 import { AddressDB, NewAddressDB } from 'src/types/database.types'
 import AppError from 'src/utils/error_handling/AppError'
@@ -43,6 +43,17 @@ export default class AddressRepository extends BaseRepository {
       )
 
     return await this.addressMapper.toDTO(addressDB)
+  }
+
+  async getManyByIds (ids: string[]): Promise<AddressDTO[]> {
+    if (ids.length === 0) return []
+
+    const addressesDB: AddressDB[] = await this.drizzle
+      .select()
+      .from(Address)
+      .where(inArray(Address.id, ids))
+
+    return await this.addressMapper.toDTOs(addressesDB)
   }
 
   async createOne (data: AddressDTO): Promise<any> {

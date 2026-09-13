@@ -10,7 +10,8 @@ jest.mock('src/modules/accounts/account.service', () => {
   return {
     __esModule: true,
     default: jest.fn().mockImplementation(() => ({
-      getOneAccount: jest.fn()
+      getOneAccount: jest.fn(),
+      getManyAccountsByIds: jest.fn()
     }))
   }
 })
@@ -19,7 +20,8 @@ jest.mock('src/modules/establishments/addresses/address.service', () => {
   return {
     __esModule: true,
     default: jest.fn().mockImplementation(() => ({
-      getOneAddress: jest.fn()
+      getOneAddress: jest.fn(),
+      getManyAddressesByIds: jest.fn()
     }))
   }
 })
@@ -113,12 +115,14 @@ describe('EstablishmentMapper', () => {
   ;(AccountService as jest.Mock).mockImplementation(() => ({
       getOneAccount: jest.fn(async (_: any, { id }: any) => {
         return await Promise.resolve(accounts.find(acc => acc.id === id))
-      })
+      }),
+      getManyAccountsByIds: jest.fn(async (_c: any, ids: string[]) => accounts.filter(account => ids.includes(account.id)))
     }))
     ;(AddressService as jest.Mock).mockImplementation(() => ({
       getOneAddress: jest.fn(async (_: any, { id }: any) => {
         return await Promise.resolve(addresses.find(addr => addr.id === id))
-      })
+      }),
+      getManyAddressesByIds: jest.fn(async (_c: any, ids: string[]) => addresses.filter(address => ids.includes(address.id)))
     }))
 
     const mapper = new EstablishmentMapper(c)
@@ -158,6 +162,9 @@ describe('EstablishmentMapper', () => {
     expect(dtos[1].name).toBe(dbs[1].name)
     expect(dtos[1].createdAt).toBe(dbs[1].created_at.toISOString())
     expect(dtos[1].updatedAt).toBe(dbs[1].updated_at.toISOString())
+
+    expect((AccountService as jest.Mock).mock.results[0].value.getManyAccountsByIds).toHaveBeenCalledWith(c, ['owner-1'])
+    expect((AddressService as jest.Mock).mock.results[0].value.getManyAddressesByIds).toHaveBeenCalledWith(c, ['addr-1', 'addr-2'])
   })
 
   test('toDB - success with ids', () => {

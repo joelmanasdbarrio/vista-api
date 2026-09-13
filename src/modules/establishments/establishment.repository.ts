@@ -1,4 +1,4 @@
-import { and, count, eq, like, or, SQL, sql } from 'drizzle-orm'
+import { and, count, eq, inArray, like, or, SQL, sql } from 'drizzle-orm'
 import { Context } from 'hono'
 import { EstablishmentDB } from 'src/types/database.types'
 import AppError from 'src/utils/error_handling/AppError'
@@ -80,6 +80,17 @@ export default class EstablishmentRepository extends BaseRepository {
       .limit(1)
 
     return await this.establishmentMapper.toDTO(establishmentDB)
+  }
+
+  async getManyByIds (ids: string[]): Promise<EstablishmentDTO[]> {
+    if (ids.length === 0) return []
+
+    const establishmentsDB: EstablishmentDB[] = await this.drizzle
+      .select()
+      .from(Establishment)
+      .where(inArray(Establishment.id, ids))
+
+    return await this.establishmentMapper.toDTOs(establishmentsDB)
   }
 
   async createOne (data: EstablishmentDTO): Promise<EstablishmentDTO> {

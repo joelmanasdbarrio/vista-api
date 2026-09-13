@@ -38,6 +38,11 @@ export default class EstablishmentService extends BaseService {
     return await establishmentRepository.getOneById(id)
   }
 
+  async getManyEstablishmentsByIds (c: Context, ids: string[]): Promise<EstablishmentDTO[]> {
+    const establishmentRepository = new EstablishmentRepository(c)
+    return await establishmentRepository.getManyByIds(ids)
+  }
+
   async createEstablishment (c: Context, body: PostEstablishmentBody): Promise<EstablishmentDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createNewEstablishment' }
     Logger.info('Create a new Establishment document', labels)

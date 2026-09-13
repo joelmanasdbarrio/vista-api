@@ -68,7 +68,56 @@ export default class ActivityOnsiteMapper extends BaseMapper<ActivityDB & Activi
   }
 
   async toDTOs (input: Array<ActivityDB & ActivityOnsiteDB>): Promise<ActivityOnsiteDTO[]> {
-    return await Promise.all(input.map(this.toDTO))
+    const ownerIds = [...new Set(input.map(activity => activity.owner_id))]
+    const categoryIds = [...new Set(input.map(activity => activity.category_id))]
+    const establishmentIds = [...new Set(input.flatMap(activity => activity.location_establishment_id != null ? [activity.location_establishment_id] : []))]
+    const [owners, categories, establishments] = await Promise.all([
+      new AccountService().getManyAccountsByIds(this.c, ownerIds),
+      new ActivityCategoryService().getManyActivityCategoriesByIds(this.c, categoryIds),
+      new EstablishmentService().getManyEstablishmentsByIds(this.c, establishmentIds)
+    ])
+    const ownersById = new Map(owners.map(owner => [owner.id, owner]))
+    const categoriesById = new Map(categories.map(category => [category.id, category]))
+    const establishmentsById = new Map(establishments.map(establishment => [establishment.id, establishment]))
+
+    return input.map(activity => {
+      const owner = ownersById.get(activity.owner_id)
+      const category = categoriesById.get(activity.category_id)
+      if (owner == null) throw new AppError(404, 'Activity owner not found', { code: 'ACTIVITY_OWNER_NOT_FOUND', message: 'Activity owner not found' })
+      if (category == null) throw new AppError(404, 'Activity category not found', { code: 'ACTIVITY_CATEGORY_NOT_FOUND', message: 'Activity category not found' })
+
+      const establishment = activity.location_establishment_id != null
+        ? establishmentsById.get(activity.location_establishment_id)
+        : undefined
+
+      return {
+        id: activity.activity_id,
+        owner,
+        category,
+        title: activity.title,
+        description: activity.description ?? '',
+        images: activity.images ?? [],
+        time: {
+          start: activity.time_start ? activity.time_start.toISOString() : undefined,
+          end: activity.time_end ? activity.time_end.toISOString() : undefined
+        },
+        price: { min: activity.price_min ?? 0, max: activity.price_max ?? 0, currency: activity.price_currency ?? 'USD' },
+        participants: { min: activity.participants_min ?? 0, max: activity.participants_max ?? 0 },
+        language: activity.language ?? 'en',
+        website: activity.website ?? '',
+        isDraft: activity.is_draft ?? true,
+        location: establishment ?? {
+          coordinates: {
+            latitude: activity.location_coordinates.y ?? 0,
+            longitude: activity.location_coordinates.x ?? 0
+          }
+        },
+        createdAt: activity.created_at ? activity.created_at.toISOString() : undefined,
+        updatedAt: activity.updated_at ? activity.updated_at.toISOString() : undefined,
+        type: ActivityTypeEnum.ONSITE,
+        activityType: 'ActivityOnsiteDTO'
+      }
+    })
   }
 
   toDB (data: ActivityOnsiteDTO): { activity: NewActivityDB, activityOnsite: NewActivityOnsiteDB } {

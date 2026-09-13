@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 import { Context } from 'hono'
 import { ActivityCategoryDB } from 'src/types/database.types'
 import AppError from 'src/utils/error_handling/AppError'
@@ -51,6 +51,17 @@ export default class ActivityCategoryRepository extends BaseRepository {
       )
 
     if (activityCategoryDB) return await this.activityCategoryMapper.toDTO(activityCategoryDB)
+  }
+
+  async getManyByIds (ids: string[]): Promise<ActivityCategoryDTO[]> {
+    if (ids.length === 0) return []
+
+    const categoriesDB: ActivityCategoryDB[] = await this.drizzle
+      .select()
+      .from(ActivityCategory)
+      .where(inArray(ActivityCategory.id, ids))
+
+    return await this.activityCategoryMapper.toDTOs(categoriesDB)
   }
 
   /**

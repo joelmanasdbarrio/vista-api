@@ -55,7 +55,48 @@ export default class EstablishmentMapper extends BaseMapper<EstablishmentDB, Est
   }
 
   async toDTOs (inputs: EstablishmentDB[]): Promise<EstablishmentDTO[]> {
-    return await Promise.all(inputs.map(async input => await this.toDTO(input)))
+    const ownerIds = [...new Set(inputs.map(input => input.owner_id))]
+    const addressIds = [...new Set(inputs.map(input => input.address_id))]
+    const [owners, addresses] = await Promise.all([
+      new AccountService().getManyAccountsByIds(this.c, ownerIds),
+      new AddressService().getManyAddressesByIds(this.c, addressIds)
+    ])
+    const ownersById = new Map(owners.map(owner => [owner.id, owner]))
+    const addressesById = new Map(addresses.map(address => [address.id, address]))
+
+    return inputs.map(input => {
+      const ownerDTO = ownersById.get(input.owner_id)
+      if (ownerDTO == null) {
+        throw new AppError(404, `Establishment owner with ID "${input.owner_id}" not found`, {
+          code: 'ESTABLISHMENT_OWNER_NOT_FOUND',
+          message: `Establishment owner with ID "${input.owner_id}" not found`
+        })
+      }
+
+      if (ownerDTO.type !== AccountTypeEnum.ENTERPRISE) {
+        throw new AppError(400, 'Invalid Account type', {
+          code: 'INVALID_ACCOUNT_TYPE',
+          message: 'Invalid Account type'
+        })
+      }
+
+      const addressDTO = addressesById.get(input.address_id)
+      if (addressDTO == null) {
+        throw new AppError(404, `Establishment address with ID "${input.address_id}" not found`, {
+          code: 'ESTABLISHMENT_ADDRESS_NOT_FOUND',
+          message: `Establishment address with ID "${input.address_id}" not found`
+        })
+      }
+
+      return {
+        id: input.id,
+        owner: ownerDTO,
+        address: addressDTO,
+        name: input.name,
+        createdAt: input.created_at.toISOString(),
+        updatedAt: input.updated_at.toISOString()
+      }
+    })
   }
 
   toDB (data: EstablishmentDTO): NewEstablishmentDB {

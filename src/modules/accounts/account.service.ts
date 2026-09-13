@@ -50,6 +50,11 @@ export default class AccountService extends BaseService {
     return account
   }
 
+  async getManyAccountsByIds (c: Context, ids: string[]): Promise<AccountDTO[]> {
+    const accountRepository = new AccountRepository(c)
+    return await accountRepository.getManyByIds(ids)
+  }
+
   async updateOneAccount (c: Context, body: PatchAccountBody): Promise<AccountDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'updateOneAccount' }
     Logger.info('Update Account document', labels)

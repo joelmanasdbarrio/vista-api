@@ -33,7 +33,22 @@ export default class ActivityCategoryMapper extends BaseMapper<ActivityCategoryD
   }
 
   async toDTOs (input: ActivityCategoryDB[]): Promise<ActivityCategoryDTO[]> {
-    return await Promise.all(input.map(this.toDTO))
+    const parentIds = [...new Set(input.flatMap(category => category.parent_id != null ? [category.parent_id] : []))]
+    const parentCategories = parentIds.length > 0
+      ? await new ActivityCategoryService().getManyActivityCategoriesByIds(this.c, parentIds)
+      : []
+    const parentsById = new Map(parentCategories.map(category => [category.id, category]))
+
+    return input.map(category => ({
+      id: category.id,
+      parent: category.parent_id != null ? parentsById.get(category.parent_id) : undefined,
+      name: category.name,
+      i18nKey: category.i18nKey,
+      icon: category.icon ?? '',
+      color: category.color ?? '',
+      createdAt: category.created_at ? category.created_at.toISOString() : undefined,
+      updatedAt: category.updated_at ? category.updated_at.toISOString() : undefined
+    }))
   }
 
   toDB (data: ActivityCategoryDTO): NewActivityCategoryDB {

@@ -1,4 +1,4 @@
-import { and, count, eq, like, or, sql, SQL } from 'drizzle-orm'
+import { and, count, eq, inArray, like, or, sql, SQL } from 'drizzle-orm'
 import { Context } from 'hono'
 import { AccountDB } from 'src/types/database.types'
 import AppError from 'src/utils/error_handling/AppError'
@@ -75,6 +75,17 @@ export default class AccountRepository extends BaseRepository {
       )
 
     return await this.accountMapper.toDTO(accountDB)
+  }
+
+  async getManyByIds (ids: string[]): Promise<AccountDTO[]> {
+    if (ids.length === 0) return []
+
+    const accountsDB: AccountDB[] = await this.drizzle
+      .select()
+      .from(Account)
+      .where(inArray(Account.id, ids))
+
+    return await this.accountMapper.toDTOs(accountsDB)
   }
 
   async getOneByUsername (username: string): Promise<AccountDTO | undefined> {

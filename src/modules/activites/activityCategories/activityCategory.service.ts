@@ -25,4 +25,9 @@ export default class ActivityCategoryService extends BaseService {
     const activityCategoryRepository = new ActivityCategoryRepository(c)
     return await activityCategoryRepository.getOneById(id)
   }
+
+  async getManyActivityCategoriesByIds (c: Context, ids: string[]): Promise<ActivityCategoryDTO[]> {
+    const activityCategoryRepository = new ActivityCategoryRepository(c)
+    return await activityCategoryRepository.getManyByIds(ids)
+  }
 }

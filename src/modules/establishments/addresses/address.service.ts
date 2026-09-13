@@ -17,6 +17,11 @@ export default class AddressService extends BaseService {
     return await addressRepository.getOneById(id)
   }
 
+  async getManyAddressesByIds (c: Context, ids: string[]): Promise<AddressDTO[]> {
+    const addressRepository = new AddressRepository(c)
+    return await addressRepository.getManyByIds(ids)
+  }
+
   async createAddress (c: Context, body: PostAddressBody): Promise<AddressDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createNewAddress' }
     Logger.info('Create a new Address document', labels)
