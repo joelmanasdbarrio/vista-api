@@ -1,11 +1,11 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
 import { Context } from 'hono'
+import getDatabase from 'src/db/client'
 import config from 'src/utils/config'
 
 export default abstract class BaseRepository implements Repository {
   protected layer: string = 'Repository'
   // protected supabase
-  protected drizzle
+  protected drizzle: ReturnType<typeof getDatabase>
   protected c: Context
 
   constructor (c: Context) {
@@ -15,7 +15,7 @@ export default abstract class BaseRepository implements Repository {
     //   config.get(c, 'SUPABASE_API_KEY')
     // )
 
-    this.drizzle = drizzle(config.get(c, 'DATABASE_URL'))
+    this.drizzle = getDatabase(config.get(c, 'DATABASE_URL'))
   }
 
   abstract getAllPaginated (query: any): Promise<any>
