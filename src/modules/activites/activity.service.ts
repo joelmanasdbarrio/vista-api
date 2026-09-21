@@ -153,7 +153,7 @@ export class ActivityService extends BaseService {
     if ('id' in newLocation) {
       const establishmentOwnerId = 'owner' in newLocation ? (typeof newLocation.owner === 'string' ? newLocation.owner : newLocation.owner.id) : null
       if (establishmentOwnerId && JSON.stringify(c.get('user').id) !== JSON.stringify(establishmentOwnerId)) {
-        this.findOrCreateEstablishmentRequest(c, newLocation, activity)
+        await this.findOrCreateEstablishmentRequest(c, newLocation, activity)
       }
     }
 

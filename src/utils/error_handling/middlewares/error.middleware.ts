@@ -38,14 +38,17 @@ const prodError = (err: AppError, c: Context) => {
   }
 }
 
-export default function globalErrorHandler (err: any, c: Context) {
+export default function globalErrorHandler (err: unknown, c: Context) {
   // Ensure the error is always an AppError
-  if (!(err instanceof AppError)) {
-    err = new AppError(500, err.message || 'Internal Server Error', { code: err.code || 'INTERNAL_SERVER_ERROR', message: err.message })
-  }
+  const appError = err instanceof AppError
+    ? err
+    : (() => {
+        const error = err instanceof Error ? err : new Error('Internal Server Error')
+        return new AppError(500, error.message, { code: 'INTERNAL_SERVER_ERROR', message: error.message })
+      })()
   if (config.get(c, 'NODE_ENV') === NODE_ENV.DEVELOPMENT) {
-    return devError(err, c)
+    return devError(appError, c)
   } else {
-    return prodError(err, c)
+    return prodError(appError, c)
   }
 }

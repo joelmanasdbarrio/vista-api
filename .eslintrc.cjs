@@ -8,7 +8,7 @@ module.exports = {
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-floating-promises': 'off',
+    '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-misused-promises': 'off',
     // Keep essential formatting rules
     '@typescript-eslint/semi': ['error', 'never'],

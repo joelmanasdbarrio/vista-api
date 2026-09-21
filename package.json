@@ -18,7 +18,7 @@
     "wrangler-secret:put": "wrangler secret put",
     "drizzle:generate": "npx drizzle-kit generate",
     "drizzle:migrate": "npx drizzle-kit migrate",
-    "types:generate": "npx openapi-typescript ./node_modules/@joelmanasdbarrio/vista-spec/openapi/openapi-rest.yaml --output ./src/types/schema/vista-spec.schema.ts --path-params-as-types",
+    "types:generate": "npx openapi-typescript ./node_modules/@joelmanasdbarrio/vista-spec/openapi/openapi-rest.yaml --output ./src/types/schema/vista-spec.schema.ts --path-params-as-types && node tools/patchGeneratedTypes.js",
     "lint:fix": "ts-standard --fix \"src/**/*.ts\"",
     "test": "jest --runInBand --detectOpenHandles"
   },

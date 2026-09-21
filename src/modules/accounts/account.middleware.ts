@@ -1,14 +1,13 @@
-import { AccountDTO } from '../../types/vista-spec.types'
+import { Context, Next } from 'hono'
 import AppError from '../../utils/error_handling/AppError'
 import AccountService from './account.service'
-import { Context, Next } from 'hono'
 
-export const accountExists = async (c: Context, next: Next) => {
+export const accountExists = async (c: Context, next: Next): Promise<void> => {
   const id = c.req.param('id')
 
   const accountService = new AccountService()
 
-  const account = await accountService.getOneAccount(c, id)
+  const account = await accountService.getOneAccount(c, { id })
 
   if (account == null) {
     throw new AppError(404, `Account with ID "${id}" not found`, {

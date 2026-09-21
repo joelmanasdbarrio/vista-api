@@ -3,11 +3,11 @@ import AppError from 'src/utils/error_handling/AppError'
 import '../../../types/hono.types'
 import ActivityCategoryService from './activityCategory.service'
 
-export const activityCategoryExists = async (c: Context, next: Next) => {
+export const activityCategoryExists = async (c: Context, next: Next): Promise<void> => {
   const id = c.req.param('id')
 
   const activityCategoryService = new ActivityCategoryService()
-  const activityCategory = await activityCategoryService.getOneActivityCategory(c, id)
+  const activityCategory = await activityCategoryService.getOneActivityCategory(c, { id })
 
   if (activityCategory == null) {
     throw new AppError(404, `Activity Category with ID "${id}" not found`, {
