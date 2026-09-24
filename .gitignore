@@ -14,8 +14,6 @@ drizzle/
 .wrangler
 
 # env
-.env
-.env.production
 .dev.vars
 
 # misc

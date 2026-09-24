@@ -1,16 +1,16 @@
 // setupLocalDependencies.js
 // Script to setup local database tables and create a test user for Vista API
 
-import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import postgres from 'postgres'
 
-// Lightweight .env loader (no external dependencies)
+// Lightweight .dev.vars loader (no external dependencies)
 function loadDotEnv () {
   try {
-    const envPath = path.resolve(process.cwd(), '.env')
+    const envPath = path.resolve(process.cwd(), '.dev.vars')
     if (!fs.existsSync(envPath)) {
-      console.log('.env not found in project root, skipping .env load')
+      console.log('.dev.vars not found in project root, skipping .dev.vars load')
       return
     }
 
@@ -31,49 +31,26 @@ function loadDotEnv () {
         process.env[key] = val
       }
     }
-    console.log('Loaded .env into process.env')
+    console.log('Loaded .dev.vars into process.env')
   } catch (err) {
-    console.warn('Failed to load .env file:', err?.message ?? err)
+    console.warn('Failed to load .dev.vars file:', err?.message ?? err)
   }
 }
 
-function run(command, options = {}) {
-  try {
-    console.log(`Running: ${command}`)
-    execSync(command, { stdio: 'inherit', ...options })
-  } catch (err) {
-    console.error(`Error running command: ${command}`)
-    process.exit(1)
-  }
-}
-
-// Load .env before running migrations so DATABASE_URL is available to drizzle
+// Load .dev.vars before running migrations so DATABASE_URL is available to drizzle
 loadDotEnv()
 
-// Wait for PostgreSQL to be ready
-console.log('Waiting for PostgreSQL to be ready...')
-let retries = 10
-let connected = false
+// `supabase start` (run via init-local-dependencies) blocks until all services pass their
+// health checks, so Postgres is already ready by the time this script runs.
+const sql = postgres(process.env.DATABASE_URL)
 
-while (!connected && retries > 0) {
-  try {
-    execSync('docker exec vista_postgres pg_isready -U testusr -d vista_db -h localhost', { stdio: 'pipe' })
-    connected = true
-    console.log('PostgreSQL is ready!')
-  } catch (err) {
-    retries--
-    console.log(`PostgreSQL not ready yet, retrying... (${retries} attempts left)`)
-    execSync('sleep 2', { stdio: 'pipe' })
-  }
-}
+// Local Supabase Postgres bundles postgis but doesn't enable it by default
+await sql`create extension if not exists postgis with schema public`
 
-if (!connected) {
-  console.error('PostgreSQL failed to become ready after waiting')
-  process.exit(1)
-}
-
-// Step 1: Run Drizzle migrations to create tables
-run('npm run drizzle:migrate')
+// `supabase start`/`supabase db reset` already applies supabase/migrations (the mirrored copy of
+// drizzle/) on a fresh database, so schema creation here would collide with Drizzle's own
+// migration journal. `drizzle:migrate` is only meant for applying migrations directly to a
+// remote database (e.g. production) that isn't managed by the Supabase CLI.
 
 // Step 2: Insert test users into the database
 // You can customize these values as needed
@@ -146,8 +123,11 @@ const TEST_USERS = [
 ]
 
 for (const user of TEST_USERS) {
-  const insertUserSQL = `INSERT INTO account (id, name, username, email, biography, gender, birthdate, avatar, website, is_private, is_verified, type, created_at, updated_at) VALUES (gen_random_uuid(), '${user.name}', '${user.username}', '${user.email}', '${user.biography}', '${user.gender}', '${user.birthdate}', '${user.avatar}', '${user.website}', ${user.is_private}, ${user.is_verified}, '${user.type}', NOW(), NOW());`
-  run(`docker exec -i vista_postgres psql -U testusr -d vista_db -c "${insertUserSQL}"`)
+  await sql`
+    INSERT INTO account (id, name, username, email, biography, gender, birthdate, avatar, website, is_private, is_verified, type, created_at, updated_at)
+    VALUES (gen_random_uuid(), ${user.name}, ${user.username}, ${user.email}, ${user.biography}, ${user.gender}, ${user.birthdate}, ${user.avatar}, ${user.website}, ${user.is_private}, ${user.is_verified}, ${user.type}, NOW(), NOW())
+  `
 }
 
+await sql.end()
 console.log('Local dependencies setup complete.')
