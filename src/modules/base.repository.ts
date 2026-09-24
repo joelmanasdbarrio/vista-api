@@ -4,17 +4,11 @@ import config from 'src/utils/config'
 
 export default abstract class BaseRepository implements Repository {
   protected layer: string = 'Repository'
-  // protected supabase
   protected drizzle: ReturnType<typeof getDatabase>
   protected c: Context
 
   constructor (c: Context) {
     this.c = c
-    // this.supabase = createClient(
-    //   config.get(c, 'DATABASE_URL'),
-    //   config.get(c, 'SUPABASE_API_KEY')
-    // )
-
     this.drizzle = getDatabase(config.get(c, 'DATABASE_URL'))
   }
 

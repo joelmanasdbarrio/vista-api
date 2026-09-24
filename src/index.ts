@@ -2,21 +2,27 @@ import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
-import './types/hono.types'
+import { NODE_ENV } from './types/hono.types'
 
 import AccountRouter from './modules/accounts/account.router'
 import ActivityRouter from './modules/activites/activity.router'
-import AuthRouter from './modules/auth/auth.router'
 import EstablishmentRouter from './modules/establishments/establishment.router'
 import globalErrorHandler from './utils/error_handling/middlewares/error.middleware'
 
 const app = new Hono()
 
 app.use(logger())
-app.use(prettyJSON({ space: 2 }))
+
+app.use(async (c, next) => {
+  if (process.env.NODE_ENV === NODE_ENV.DEVELOPMENT) {
+    return await prettyJSON({ space: 2 })(c, next)
+  }
+  return await next()
+})
+
 app.use(contextStorage())
 
-app.route('/api/v1/', new AuthRouter().router)
+// app.route('/api/v1/', new AuthRouter().router)
 app.route('/api/v1/accounts', new AccountRouter().router)
 app.route('/api/v1/activities', new ActivityRouter().router)
 app.route('/api/v1/establishments', new EstablishmentRouter().router)

@@ -1,7 +1,7 @@
 import { Context } from 'hono'
 import { ActivityService } from 'src/modules/activites/activity.service'
 import BaseService from 'src/modules/base.service'
-import { AccountEnterpriseDTO, ActivityTypeEnum, EstablishmentDTO, EstablishmentRequestDTO, EstablishmentRequestsPaginatedDTO, EstablishmentRequestStatusEnum } from 'src/types/vista-spec.types'
+import { ActivityTypeEnum, EstablishmentDTO, EstablishmentRequestDTO, EstablishmentRequestsPaginatedDTO, EstablishmentRequestStatusEnum } from 'src/types/vista-spec.types'
 import AppError from 'src/utils/error_handling/AppError'
 import getId from 'src/utils/getId'
 import Logger, { LogLabels } from 'src/utils/logger'
@@ -129,18 +129,25 @@ export default class EstablishmentRequestService extends BaseService {
     }
 
     const user = c.get('user')
+    const establishmentOwnerId = getId((establishmentRquestDTO.requestToEstablishment as EstablishmentDTO).owner)
 
-    if ((body.status !== establishmentRquestDTO.status) && (((establishmentRquestDTO.requestToEstablishment as EstablishmentDTO).owner as AccountEnterpriseDTO).id !== user.id)) {
+    // Only the establishment owner can approve/reject requests
+    if (body.status !== establishmentRquestDTO.status && establishmentOwnerId !== user.id) {
       throw new AppError(403, 'Forbidden', {
         code: 'FORBIDDEN',
         message: 'Forbidden',
-        details: 'You can only update the status of Establishment Requests you own.'
+        details: 'Only the establishment owner can change the request status.'
       })
     }
 
+    // Request source and destination are immutable
     const establishmentRquestToUpdate: EstablishmentRequestDTO = {
       id,
-      ...establishmentRquestDTO
+      requestFromActivity: establishmentRquestDTO.requestFromActivity,
+      requestToEstablishment: establishmentRquestDTO.requestToEstablishment,
+      status: body.status ?? establishmentRquestDTO.status,
+      createdAt: establishmentRquestDTO.createdAt,
+      updatedAt: new Date().toISOString()
     }
 
     const establishmentRequestRepository = new EstablishmentRequestRepository(c)
@@ -150,6 +157,28 @@ export default class EstablishmentRequestService extends BaseService {
   async deleteEstablishmentRequest (c: Context, id: string): Promise<void> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteEstablishmentRequest' }
     Logger.info('Delete Establishment Request document', labels)
+
+    const req = await this.getOneEstablishmentRequest(c, { id })
+    if (req == null) {
+      throw new AppError(404, `Establishment Request with ID "${id}" not found`, {
+        code: 'ESTABLISHMENT_REQUEST_NOT_FOUND',
+        message: `Establishment Request with ID "${id}" not found`,
+        details: 'Please, check if the desired ID is correctly typed.'
+      })
+    }
+
+    const user = c.get('user')
+    const activityOwnerId = getId(req.requestFromActivity)
+    const establishmentOwnerId = getId((req.requestToEstablishment as EstablishmentDTO).owner)
+
+    // Only the activity owner or establishment owner can delete the request
+    if (user.id !== activityOwnerId && user.id !== establishmentOwnerId) {
+      throw new AppError(403, 'Forbidden', {
+        code: 'FORBIDDEN',
+        message: 'Forbidden',
+        details: 'Only the activity owner or establishment owner can delete this request.'
+      })
+    }
 
     const establishmentRequestRepository = new EstablishmentRequestRepository(c)
     await establishmentRequestRepository.deleteOneById(id)

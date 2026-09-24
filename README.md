@@ -213,6 +213,41 @@ To seed the local database with test accounts, run:
 npm run setup-local-dependencies
 ```
 
+### Authenticating locally
+
+The Vista API has no built-in login/signup endpoints — the `AuthRouter` is commented out in [src/index.ts](src/index.ts) and [src/modules/auth/auth.router.ts](src/modules/auth/auth.router.ts) defines no routes. Instead, authentication happens directly against the local Supabase Auth service (GoTrue) at `http://127.0.0.1:54321/auth/v1/*`, which issues JWTs that the API validates via the `protectedRoute` middleware.
+
+**Important:** The seeded test accounts from `npm run setup-local-dependencies` are inserted directly into `public.account` (not `auth.users`), so they have no password and **cannot** be used to log in. Create a real Supabase Auth user instead:
+
+**1. Sign up a new user** via GoTrue:
+
+```bash
+curl -X POST "http://127.0.0.1:54321/auth/v1/signup" \
+  -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"testuser@gmail.com","password":"Password123!"}'
+```
+
+This fires the `on_auth_user_created` trigger (defined in [drizzle/0001_sync-auth-users.sql](drizzle/0001_sync-auth-users.sql)) which automatically creates a matching row in `public.account`. Since local email confirmations are disabled, the response includes a usable `access_token` immediately.
+
+**2. Reuse the token later** via password grant:
+
+```bash
+curl -X POST "http://127.0.0.1:54321/auth/v1/token?grant_type=password" \
+  -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"testuser@gmail.com","password":"Password123!"}'
+```
+
+**3. Call the Vista API** with the token:
+
+```bash
+curl "http://127.0.0.1:8787/api/v1/accounts/" \
+  -H "Authorization: Bearer <access_token>"
+```
+
+Replace `<access_token>` with the `access_token` from step 1 or 2. The `protectedRoute` middleware verifies it using `SUPABASE_JWT_SECRET` and rejects it with `401 Unauthorized` if invalid or expired. The anon `apikey` above is the local Supabase default from [.dev.vars.example](.dev.vars.example) — safe to commit, not a real secret.
+
 Generate a new Drizzle migration from schema changes:
 
 ```bash

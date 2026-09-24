@@ -10,8 +10,8 @@ export const ActivityParticipantSchema = z.object({
 })
 
 export const GetActivityParticipantsSchema = z.object({
-  page: z.number().int().min(1).default(1),
-  limit: z.number().int().min(1).max(100).default(10),
+  page: z.string().transform(val => parseInt(val, 10)).pipe(z.number().int().min(1)).default(1),
+  limit: z.string().transform(val => parseInt(val, 10)).pipe(z.number().int().min(1).max(100)).default(10),
   name: z.string().optional(),
   username: z.string().optional(),
   activityId: z.uuid().optional()

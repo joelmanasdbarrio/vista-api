@@ -22,6 +22,7 @@ export default class EstablishmentRequestRouter {
         })
       .patch('/:id',
         validate('param', PatchEstablishmentRequestSchema),
+        validate('json', PatchEstablishmentRequestSchema),
         async (c: Context<any, any, PatchEstablishmentRequestInput>) => {
           const res = await this.establishmentRequestController.updateEstablishmentRequest(c)
           return c.json({ ...res }, 200)

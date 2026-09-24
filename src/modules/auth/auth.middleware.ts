@@ -63,21 +63,25 @@ export const protectedRoute = async (c: Context, next: Next) => {
     throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'You must be logged in to access this resource' })
   }
 
-  await verify(token, config.get(c, 'SUPABASE_JWT_SECRET'), 'HS256')
-    .then(async payload => {
-      if (payload.sub) {
-        const accountService = new AccountService()
-        const user = await accountService.getOneAccount(c, { id: payload.sub as string })
+  let payload
+  try {
+    payload = await verify(token, config.get(c, 'SUPABASE_JWT_SECRET'), 'HS256')
+  } catch (err) {
+    console.error('Token verification failed:', err)
+    throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'Authentication token is invalid or expired. Please, log in again.' })
+  }
 
-        if (user == null) throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'Authentication token is badly formatted. Please, log in again.' })
+  if (!payload.sub) {
+    throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'Authentication token is badly formatted. Please, log in again.' })
+  }
 
-        c.set('user', user)
-        await next()
-      } else {
-        throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'Authentication token is badly formatted. Please, log in again.' })
-      }
-    }).catch(err => {
-      console.error('Token invalid:', err)
-      throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'Authentication token is badly formatted or your account no longer exists. Please, log in again.' })
-    })
+  const accountService = new AccountService()
+  const user = await accountService.getOneAccount(c, { id: payload.sub as string })
+
+  if (user == null) {
+    throw new AppError(401, 'Unauthorized', { code: 'UNAUTHORIZED', message: 'Unauthorized', details: 'Your account no longer exists. Please, log in again.' })
+  }
+
+  c.set('user', user)
+  await next()
 }

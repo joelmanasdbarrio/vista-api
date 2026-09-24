@@ -45,14 +45,23 @@ export class ActivityService extends BaseService {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createActivity' }
     Logger.info('Create a new Activity document', labels)
 
-    const ownerId = getId(body.owner)
+    const authenticatedUser = c.get('user')
+    const suppliedOwnerId = getId(body.owner)
+    if (suppliedOwnerId && suppliedOwnerId !== authenticatedUser.id) {
+      throw new AppError(403, 'Forbidden', {
+        code: 'FORBIDDEN',
+        message: 'Forbidden',
+        details: 'You cannot create an activity for another user.'
+      })
+    }
+
     const accountService = new AccountService()
-    const ownerDTO = await accountService.getOneAccount(c, { id: ownerId })
+    const ownerDTO = await accountService.getOneAccount(c, { id: authenticatedUser.id })
     if (ownerDTO == null) {
-      throw new AppError(404, `Activity owner with ID "${ownerId}" not found`, {
-        code: 'ACTIVITY_OWNER_NOT_FOUND',
-        message: `Activity owner with ID "${ownerId}" not found`,
-        details: 'Please check if the owner ID is correct.'
+      throw new AppError(401, 'Unauthorized', {
+        code: 'UNAUTHORIZED',
+        message: 'Unauthorized',
+        details: 'Your account no longer exists. Please log in again.'
       })
     }
 
@@ -190,21 +199,25 @@ export class ActivityService extends BaseService {
       })
     }
 
+    // Owner and activity type are immutable
     const bodyOwnerId = getId(body.owner)
-    let newOwner: AccountDTO | undefined
     if (bodyOwnerId && bodyOwnerId !== ownerId) {
-      const accountService = new AccountService()
-      newOwner = await accountService.getOneAccount(c, { id: bodyOwnerId })
-      if (newOwner == null) {
-        throw new AppError(404, `Account with ID "${bodyOwnerId}" not found`, {
-          code: 'ACCOUNT_NOT_FOUND',
-          message: `Account with ID "${bodyOwnerId}" not found`,
-          details: 'Please, check if the desired ID is correctly typed.'
-        })
-      }
-    } else {
-      newOwner = activityDTO.owner as AccountDTO
+      throw new AppError(403, 'Forbidden', {
+        code: 'FORBIDDEN',
+        message: 'Forbidden',
+        details: 'Activity owner cannot be changed.'
+      })
     }
+
+    if (body.activityType && body.activityType !== activityDTO.type) {
+      throw new AppError(400, 'Bad Request', {
+        code: 'IMMUTABLE_FIELD',
+        message: 'Activity type cannot be changed',
+        details: `Activity type is immutable. This activity is ${activityDTO.type}.`
+      })
+    }
+
+    const newOwner = activityDTO.owner as AccountDTO
 
     const bodyCategoryId = getId(body.category)
     let newCategory: ActivityCategoryDTO | undefined
@@ -222,15 +235,17 @@ export class ActivityService extends BaseService {
       newCategory = activityDTO.category as ActivityCategoryDTO
     }
 
-    if (body.activityType === ActivityTypeEnum.ONLINE) {
-      return await this.updateOnlineActivity(c, id, body, newOwner, newCategory, activityDTO as ActivityOnlineDTO)
-    } else if (body.activityType === ActivityTypeEnum.ONSITE) {
-      return await this.updateOnsiteActivity(c, id, body, newOwner, newCategory, activityDTO as ActivityOnsiteDTO)
+    // Dispatch to subtype-specific update based on persisted activity type
+    if (activityDTO.type === ActivityTypeEnum.ONLINE) {
+      return await this.updateOnlineActivity(c, id, body, newOwner, newCategory, activityDTO)
+    } else if (activityDTO.type === ActivityTypeEnum.ONSITE) {
+      return await this.updateOnsiteActivity(c, id, body, newOwner, newCategory, activityDTO)
     } else {
-      throw new AppError(400, `Invalid activity type "${String(body.activityType)}"`, {
+      const unknownType = (activityDTO as any).type
+      throw new AppError(400, `Invalid activity type "${String(unknownType)}"`, {
         code: 'INVALID_ACTIVITY_TYPE',
         message: 'Invalid activity type',
-        details: `The activity type "${String(body.activityType)}" is not supported. Please, use ${Object.values(ActivityTypeEnum).join(', ')} instead.`
+        details: `The activity type "${String(unknownType)}" is not supported.`
       })
     }
   }
@@ -272,7 +287,7 @@ export class ActivityService extends BaseService {
     }
 
     const activityRepository = new ActivityRepository(c)
-    return await activityRepository.updateOneById(id, activityOnlineToUpdate)
+    return await activityRepository.updateActivityOnlineById(id, activityOnlineToUpdate)
   }
 
   private async updateOnsiteActivity (c: Context, id: string, body: PatchActivityBody, ownerDTO: AccountDTO, categoryDTO: ActivityCategoryDTO, activityDTO: ActivityOnsiteDTO): Promise<ActivityOnsiteDTO> {
@@ -327,7 +342,7 @@ export class ActivityService extends BaseService {
     }
 
     const activityRepository = new ActivityRepository(c)
-    return await activityRepository.updateOneById(id, activityOnsiteToUpdate)
+    return await activityRepository.updateActivityOnsiteById(id, activityOnsiteToUpdate)
   }
 
   async deleteOneActivity (c: Context, { id }: GetActivityParam): Promise<void> {

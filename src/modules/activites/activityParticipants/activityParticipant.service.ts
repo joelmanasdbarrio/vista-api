@@ -53,6 +53,6 @@ export default class ActivityParticipantService extends BaseService {
     Logger.info('Delete an ActivityParticipant document', labels)
 
     const activityParticipantRepository = new ActivityParticipantRepository(c)
-    await activityParticipantRepository.deleteOneById
+    await activityParticipantRepository.deleteOneByCompositeKey(body.activityId, body.accountId)
   }
 }

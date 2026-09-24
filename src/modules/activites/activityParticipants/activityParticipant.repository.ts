@@ -119,4 +119,16 @@ export default class ActivityParticipantRepository extends BaseRepository {
       .delete(ActivityParticipant)
       .where(eq(ActivityParticipant.id, id))
   }
+
+  async deleteOneByCompositeKey (activityId: string, accountId: string): Promise<void> {
+    const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteOneByCompositeKey' }
+    Logger.info(`Delete ActivityParticipant by activity "${activityId}" and account "${accountId}"`, labels)
+
+    await this.drizzle
+      .delete(ActivityParticipant)
+      .where(and(
+        eq(ActivityParticipant.activity_id, activityId),
+        eq(ActivityParticipant.participant_id, accountId)
+      ))
+  }
 }

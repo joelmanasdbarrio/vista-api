@@ -13,8 +13,8 @@ export const EstablishmentRequestSchema = z.object({
 })
 
 export const GetEstablishmentRequestsSchema = z.object({
-  page: z.number().int().min(1).default(1),
-  limit: z.number().int().min(1).max(100).default(10),
+  page: z.string().transform(val => parseInt(val, 10)).pipe(z.number().int().min(1)).default(1),
+  limit: z.string().transform(val => parseInt(val, 10)).pipe(z.number().int().min(1).max(100)).default(10),
   activityId: z.uuid().optional(),
   establishmentId: z.uuid().optional()
 })
