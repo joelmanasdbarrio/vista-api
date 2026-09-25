@@ -31,11 +31,11 @@ export const Account = pgTable('account', {
 (table) => [
   uniqueIndex('account_username_idx').on(table.username),
   uniqueIndex('account_email_idx').on(table.email),
-  check('account_name_check', sql`char_length(${table.name}) >= 2 AND char_length(${table.name}) <= 50 AND ${table.name} ~ '^[a-zA-Zñ\\s]+$'`),
+  check('account_name_check', sql`char_length(${table.name}) >= 2 AND char_length(${table.name}) <= 50 AND ${table.name} ~ '^[[:alpha:][:space:]]+$'`),
   check('account_username_check', sql`char_length(${table.username}) >= 3 AND char_length(${table.username}) <= 30 AND ${table.username} ~ '^[a-z_0-9]+$'`),
   // check('account_email_check', sql`${table.email} ~ '^[A-Za-z0-9._%+-]+@(?:gmail|hotmail|outlook|yahoo|icloud|aol|zoho|mail|protonmail|inbox|gmx|yandex|mailinator|disroot|tutanota|fastmail|startmail|runbox|hushmail|mailfence|posteo|riseup|kolabnow|mailbox|openmailbox|airmail|comcast|att|verizon|shaw|telus|charter|frontier|cox|btinternet|talktalk|virginmedia|sky|o2|orange|free|sfr|numericable|laposte|bouyguestelecom|neuf|alice|libero)\\.[A-Za-z]{2,}$'`),
   check('account_age_check', sql`(${table.birthdate} IS NULL OR ${table.birthdate} <= NOW() - INTERVAL '16 years')`)
-])
+]).enableRLS()
 
 export const Follow = pgTable('follow', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -52,7 +52,7 @@ export const Follow = pgTable('follow', {
   ),
   index('follow_follower_idx').on(table.follower_id),
   index('follow_following_idx').on(table.following_id)
-])
+]).enableRLS()
 
 export const FollowRequest = pgTable('follow_request', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -69,7 +69,7 @@ export const FollowRequest = pgTable('follow_request', {
   ),
   index('follow_request_from_idx').on(table.request_from_id),
   index('follow_request_to_idx').on(table.request_to_id)
-])
+]).enableRLS()
 
 export const Address = pgTable('address', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -99,7 +99,7 @@ export const Address = pgTable('address', {
     table.door
   ),
   index('address_location_idx').on(table.coordinates)
-])
+]).enableRLS()
 
 export const ActivityCategory = pgTable('activity_category', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -120,7 +120,7 @@ export const ActivityCategory = pgTable('activity_category', {
   index('activity_category_i18nkey_idx').on(table.i18nKey),
   check('activity_category_parent_id_check', sql`(${table.parent_id} IS NULL OR ${table.parent_id} != ${table.id})`),
   check('activity_category_required_check', sql`((${table.parent_id} IS NOT NULL AND ${table.icon} IS NOT NULL) OR (${table.parent_id} IS NULL AND ${table.color} IS NOT NULL))`)
-])
+]).enableRLS()
 
 export const Establishment = pgTable('establishment', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -129,7 +129,7 @@ export const Establishment = pgTable('establishment', {
   name: text('name').notNull(),
   created_at: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updated_at: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
-})
+}).enableRLS()
 
 export const Activity = pgTable('activity', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -160,7 +160,7 @@ export const Activity = pgTable('activity', {
   check('activity_time_check', sql`(${table.time_start} < ${table.time_end})`),
   check('activity_participants_check', sql`(${table.participants_min} IS NULL OR ${table.participants_min} >= 0) AND (${table.participants_max} IS NULL OR ${table.participants_max} >= 0) AND (${table.participants_min} IS NULL OR ${table.participants_max} IS NULL OR ${table.participants_min} <= ${table.participants_max})`),
   check('activity_price_check', sql`(${table.price_min} >= 0) AND (${table.price_max} >= 0) AND (${table.price_min} <= ${table.price_max})`)
-])
+]).enableRLS()
 
 export const ActivityOnsite = pgTable('activity_onsite', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -170,13 +170,13 @@ export const ActivityOnsite = pgTable('activity_onsite', {
 },
 (table) => [
   index('spatial_index').using('gist', table.location_coordinates)
-])
+]).enableRLS()
 
 export const ActivityOnline = pgTable('activity_online', {
   id: uuid('id').primaryKey().defaultRandom(),
   activity_id: uuid('activity_id').notNull().references(() => Activity.id, { onDelete: 'cascade' }),
   location_url: text('location_url').notNull()
-})
+}).enableRLS()
 
 export const ActivityParticipant = pgTable('activity_participant', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -192,7 +192,7 @@ export const ActivityParticipant = pgTable('activity_participant', {
   ),
   index('activity_participant_activity_idx').on(table.activity_id),
   index('activity_participant_participant_idx').on(table.participant_id)
-])
+]).enableRLS()
 
 export const EstablishmentRequest = pgTable('establishment_request', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -207,7 +207,7 @@ export const EstablishmentRequest = pgTable('establishment_request', {
     table.request_from_activity_id,
     table.request_to_establishment_id
   )
-])
+]).enableRLS()
 
 export const Notification = pgTable('notification', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -223,4 +223,4 @@ export const Notification = pgTable('notification', {
 (table) => [
   index('Notification_recipient_idx').on(table.owner_id),
   index('Notification_type_idx').on(table.type)
-])
+]).enableRLS()

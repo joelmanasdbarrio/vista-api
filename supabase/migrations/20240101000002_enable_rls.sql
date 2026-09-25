@@ -1,0 +1,25 @@
+ALTER TABLE public.account ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.activity ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.activity_category ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.activity_online ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.activity_onsite ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.activity_participant ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.address ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.establishment ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.establishment_request ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.follow ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.follow_request ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notification ENABLE ROW LEVEL SECURITY;
+
+REVOKE ALL PRIVILEGES ON TABLE public.account FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.activity FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.activity_category FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.activity_online FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.activity_onsite FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.activity_participant FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.address FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.establishment FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.establishment_request FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.follow FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.follow_request FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.notification FROM PUBLIC, anon, authenticated;

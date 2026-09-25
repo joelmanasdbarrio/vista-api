@@ -173,51 +173,45 @@ The CLI runs a local Supabase stack in Docker. [supabase/config.toml](supabase/c
 
 ```text
 Supabase CLI
-|-- api (enabled): Gateway and PostgREST endpoints for querying exposed database schemas over HTTP.
-|   `-- tls (disabled): Optional HTTPS for the local API.
+|-- api: Gateway and PostgREST endpoints for querying exposed database schemas over HTTP.
+|   `-- tls: Optional HTTPS for the local API.
 |-- db (always on): PostgreSQL storing application data plus Supabase-managed auth/storage data.
-|   |-- pooler (disabled): Optional connection pooling for database clients.
-|   |-- migrations (enabled): Replays versioned SQL files when initializing or resetting the database.
-|   |-- seed (enabled): Loads sample data after migrations; configured ./seed.sql is not present yet.
-|   `-- network_restrictions (disabled): Optional limits on which IP addresses may connect.
-|-- auth (enabled): Manages users, sessions and tokens through the Auth API.
+|   |-- pooler: Optional connection pooling for database clients.
+|   |-- migrations: Replays versioned SQL files when initializing or resetting the database.
+|   |-- seed: Loads sample data after migrations; configured ./seed.sql is not present yet.
+|   `-- network_restrictions: Optional limits on which IP addresses may connect.
+|-- auth: Manages users, sessions and tokens through the Auth API.
 |   |-- email (signup on, confirmations off): Email/password and email-based sign-in flows.
 |   |-- sms (signup off): Phone sign-in and one-time codes.
-|   |   `-- twilio (disabled): SMS delivery provider configuration.
-|   |-- mfa (disabled): Extra verification during sign-in.
+|   |   `-- twilio: SMS delivery provider configuration.
+|   |-- mfa: Extra verification during sign-in.
 |   |   |-- totp: Authenticator-app codes.
 |   |   `-- phone: SMS-based verification codes.
-|   |-- external.apple (disabled): Example OAuth identity provider; others can be configured.
-|   |-- web3.solana (disabled): Wallet-based sign-in.
-|   |-- third_party (disabled): Accept identities from Firebase, Auth0, Cognito or Clerk.
-|   `-- oauth_server (disabled): Let third-party apps request authorization from this project.
-|-- realtime (enabled): Streams database changes and supports live messaging/presence.
-|-- storage (enabled): Uploads, stores and serves files from buckets.
-|   |-- s3_protocol (enabled): S3-compatible access to storage buckets.
-|   |-- vector (enabled): Storage for vector embeddings and similarity indexes.
-|   `-- analytics (disabled): Hosted-only analytics buckets; not the local log service below.
-|-- studio (enabled): Browser dashboard for tables, SQL, Auth users and Storage.
-|-- local_smtp (enabled): Mailpit catches local Auth emails instead of delivering them.
-|-- edge_runtime (enabled): Runs Supabase Edge Functions locally (separate from this app's Worker).
-|-- analytics (enabled): Logflare service for local logs and observability.
+|   |-- external.apple: Example OAuth identity provider; others can be configured.
+|   |-- web3.solana: Wallet-based sign-in.
+|   |-- third_party: Accept identities from Firebase, Auth0, Cognito or Clerk.
+|   `-- oauth_server: Let third-party apps request authorization from this project.
+|-- realtime: Streams database changes and supports live messaging/presence.
+|-- storage: Uploads, stores and serves files from buckets.
+|   |-- s3_protocol: S3-compatible access to storage buckets.
+|   |-- vector: Storage for vector embeddings and similarity indexes.
+|   `-- analytics: Hosted-only analytics buckets; not the local log service below.
+|-- studio: Browser dashboard for tables, SQL, Auth users and Storage.
+|-- local_smtp: Mailpit catches local Auth emails instead of delivering them.
+|-- edge_runtime: Runs Supabase Edge Functions locally (separate from this app's Worker).
+|-- analytics: Logflare service for local logs and observability.
 `-- experimental
   |-- orioledb / s3 (unconfigured): Optional alternative database storage backend.
-  `-- pgdelta (enabled): Engine for database schema diff/pull operations.
+  `-- pgdelta: Engine for database schema diff/pull operations.
 ```
 
 Use `npx supabase status` to see local service URLs and database credentials. Open Studio at `http://127.0.0.1:54323` to inspect data and Auth users, or Mailpit at `http://127.0.0.1:54324` to see test emails. Studio is for inspection and day-to-day data work; edit the config file to change local service settings.
-
-To seed the local database with test accounts, run:
-
-```bash
-npm run setup-local-dependencies
-```
 
 ### Authenticating locally
 
 The Vista API has no built-in login/signup endpoints — the `AuthRouter` is commented out in [src/index.ts](src/index.ts) and [src/modules/auth/auth.router.ts](src/modules/auth/auth.router.ts) defines no routes. Instead, authentication happens directly against the local Supabase Auth service (GoTrue) at `http://127.0.0.1:54321/auth/v1/*`, which issues JWTs that the API validates via the `protectedRoute` middleware.
 
-**Important:** The seeded test accounts from `npm run setup-local-dependencies` are inserted directly into `public.account` (not `auth.users`), so they have no password and **cannot** be used to log in. Create a real Supabase Auth user instead:
+Create a Supabase Auth user to test login flows:
 
 **1. Sign up a new user** via GoTrue:
 

@@ -5,6 +5,7 @@ RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE
   default_username text;
   base_username    text;
+  sanitized_name   text;
   counter          int := 0;
 BEGIN
   base_username := split_part(NEW.email, '@', 1);
@@ -18,6 +19,8 @@ BEGIN
     default_username := base_username || counter;  -- "minombre1", "minombre2"
   END LOOP;
 
+  sanitized_name := left(btrim(regexp_replace(default_username, '[^[:alpha:] ]', '', 'g')), 50);
+
   IF TG_OP = 'INSERT' THEN
     INSERT INTO public.account (
       id, email, username, name, created_at, updated_at
@@ -28,7 +31,10 @@ BEGIN
       COALESCE(
         NEW.raw_user_meta_data->>'full_name',
         NEW.raw_user_meta_data->>'name',
-        default_username
+        CASE
+          WHEN char_length(sanitized_name) >= 2 THEN sanitized_name
+          ELSE 'User'
+        END
       ),
       NEW.created_at,
       now()
