@@ -8,7 +8,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "npm run init-local-dependencies && cross-env NODE_ENV=development npm run dev:remote",
+    "dev": "npm run setup-local-dependencies && cross-env NODE_ENV=development npm run dev:remote",
     "dev:remote": "wrangler dev",
     "dev:stop": "npm run stop-local-dependencies",
     "init-local-dependencies": "npx supabase start",
@@ -20,7 +20,8 @@
     "drizzle:generate": "node --env-file=.dev.vars node_modules/drizzle-kit/bin.cjs generate",
     "drizzle:migrate": "node --env-file=.dev.vars node_modules/drizzle-kit/bin.cjs migrate",
     "types:generate": "npx openapi-typescript ./node_modules/@joelmanasdbarrio/vista-spec/openapi/openapi-rest.yaml --output ./src/types/schema/vista-spec.schema.ts --path-params-as-types && node tools/patchGeneratedTypes.js",
-    "lint:fix": "ts-standard --fix \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint --fix \"src/**/*.ts\"",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "dependencies": {
