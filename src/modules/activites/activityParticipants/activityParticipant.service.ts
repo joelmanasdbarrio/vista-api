@@ -10,21 +10,24 @@ import { DeleteActivityParticipantObj, GetActivityParticipantsQuery, PostActivit
 export default class ActivityParticipantService extends BaseService {
   protected resource = 'ActivityParticipant'
 
-  async getAllActivityParticipantsPaginated (c: Context, query: GetActivityParticipantsQuery, activityId: string): Promise<AccountsPersonalPaginatedDTO> {
+  async getAllActivityParticipantsPaginated (c: Context, query: GetActivityParticipantsQuery): Promise<AccountsPersonalPaginatedDTO> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'getAllActivityParticipantsPaginated' }
     Logger.info('Get all ActivityParticipant documents paginated', labels)
 
-    const activityService = new ActivityService()
-    const activity = await activityService.getOneActivity(c, { id: activityId })
+    const { activityId } = query
+    if (activityId) {
+      const activityService = new ActivityService()
+      const activity = await activityService.getOneActivity(c, { id: activityId })
 
-    if (activity == null) {
-      throw new AppError(404, `Activity with ID "${activityId}" not found`, {
-        code: 'ACTIVITY_NOT_FOUND',
-        message: `Activity with ID "${activityId}" not found`,
-        details: 'Please, check if the desired ID is correctly typed'
-      })
+      if (activity == null) {
+        throw new AppError(404, `Activity with ID "${activityId}" not found`, {
+          code: 'ACTIVITY_NOT_FOUND',
+          message: `Activity with ID "${activityId}" not found`,
+          details: 'Please, check if the desired ID is correctly typed'
+        })
+      }
+      query.activityId = activityId
     }
-    query.activityId = activityId
 
     const activityParticipantRepository = new ActivityParticipantRepository(c)
     const { activityParticipants, totalActivityParticipants } = await activityParticipantRepository.getAllPaginated(query)

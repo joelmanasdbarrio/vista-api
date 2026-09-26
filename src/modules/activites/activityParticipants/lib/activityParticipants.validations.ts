@@ -17,15 +17,6 @@ export const GetActivityParticipantsSchema = z.object({
   activityId: z.uuid().optional()
 })
 
-export const PostActivityParticipantSchema = z.object({
-  accountId: z.uuid(),
-  activityId: z.uuid()
-})
-export const DeleteActivityParticipantSchema = z.object({
-  accountId: z.uuid(),
-  activityId: z.uuid()
-})
-
 export interface GetActivityParticipantsInput {
   in: {
     param: z.infer<typeof GetActivitySchema>

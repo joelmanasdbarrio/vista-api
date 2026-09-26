@@ -5,7 +5,7 @@ import AppError from 'src/utils/error_handling/AppError'
 import Logger, { LogLabels } from 'src/utils/logger'
 import { ActivityService } from '../activity.service'
 import ActivityParticipantService from './activityParticipant.service'
-import { GetActivityParticipantsInput } from './lib/activityParticipants.validations'
+import { DeleteActivityParticipantInput, GetActivityParticipantsInput, PostActivityParticipantInput } from './lib/activityParticipants.validations'
 
 export default class ActivityParticipantController extends BaseController {
   protected resource = 'ActivityParticipant'
@@ -23,7 +23,7 @@ export default class ActivityParticipantController extends BaseController {
     Logger.info('Get all ActivityParticipant documents paginated', labels)
 
     const { id: activityId } = c.req.param()
-    const { data, _meta } = await this.activityParticipantService.getAllActivityParticipantsPaginated(c, c.req.valid('query'), activityId)
+    const { data, _meta } = await this.activityParticipantService.getAllActivityParticipantsPaginated(c, { ...c.req.valid('query'), activityId })
 
     Logger.info(`Found ${data.length} activity participant(s)`, labels)
     Logger.debug(data)
@@ -35,7 +35,7 @@ export default class ActivityParticipantController extends BaseController {
     }
   }
 
-  async createActivityParticipant (c: Context<any, any, any>): Promise<ActivityParticipantResponse> {
+  async createActivityParticipant (c: Context<any, any, PostActivityParticipantInput>): Promise<ActivityParticipantResponse> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'createActivityParticipant' }
     Logger.info('Create a new ActivityParticipant document', labels)
 
@@ -62,7 +62,7 @@ export default class ActivityParticipantController extends BaseController {
     }
   }
 
-  async deleteActivityParticipant (c: Context<any, any, any>): Promise<void> {
+  async deleteActivityParticipant (c: Context<any, any, DeleteActivityParticipantInput>): Promise<void> {
     const labels: LogLabels = { resource: this.resource, layer: this.layer, method: 'deleteActivityParticipant' }
     Logger.info('Delete ActivityParticipant document by composite key', labels)
 
